@@ -1,42 +1,76 @@
-#!/bin/sh
-# audiollibre: Converteix un arxiu de text a mp3, separant els capítols i llegint-los amb Festival, afegint el nom de l'arxiu a l'etiqueta ogg del títol, i opcionalment l'autor
-# Ús: bash audiollibre.sh arxiu.txt [autor]
+#!/bin/bash
+# audiollibre: Converteix un fitxer de text a mp3, separant els capítols i llegint-los amb Festival, afegint el nom de l'fitxer a l'etiqueta ogg del títol, i opcionalment l'autor
+# Ús: bash audiollibre.sh fitxer.txt [autor]
 # Escrit per Paco Rivière http://pacoriviere.cat - Juny 2008 - Per a Ubuntu Hardy 8.04 - Llicència GNU\GPL
 # Modificat per Sergio Oller
 
-# Paràmeters
-# $1 Arxiu de text a convertir - etiqueta del titol
+# Paràmetres
+# $1 Fitxer de text a convertir - etiqueta del titol
 # $2 Etiqueta de l'autor (paràmetre opcional)
 
-# Comprovem que tenim el que ens cal: divcapitols.sh text2mp3.sh
-[ ! -f divcapitols.sh ] && echo "Cal l'script divcapitols.sh. Falta un script necessari" && exit 1
-[ ! -f text2mp3.sh ] && echo "Cal l'script text2mp3.sh. Falta un script necessari" && exit 1
+function usage()
+{
+cat << EOF
+$0 [-a autor]  fitxer.txt
+EOF
+}
 
-# Comproven que s'ha indicat l'arxiu a convertir       
-  if [ -z $1 ]; then
-	echo $0: "Cal indicar un arxiu de text!"
-	echo "Ús: bash $0 arxiu.txt [autor]"
-	exit 1
-  else
-# Comprovem que l'arxiu té extensió .txt
-	if [ $1 != ${1%.txt}.txt ]; then
-		echo $0: "Cal que l'extensió de l' arxiu de text sigui txt"
-		echo "Ús: bash $0 arxiu.txt  [autor]"
-		exit 2
-	fi
-  fi
+
+# Parse arguments:
+autor=
+infile=
+while getopts "ha:" option;
+do
+   case "$option" in
+      h) usage
+         exit 0
+         ;;
+      a) autor="$OPTARG";;
+      [?]) usage
+           exit ;;
+   esac
+done
+shift $(($OPTIND - 1)) 
+
+if [ $# = 0 ]; then
+   echo "$0: Cal indicar un fitxer de text."
+   usage
+   exit 1
+fi
+
+infile="$1"
+########
+
+# Comproven que s'ha indicat el fitxer a convertir 
+mime=$( file -ib $infile )
+
+if [[ ! "$mime" =~ "text" ]]; then
+   echo "$0: Cal indicar un fitxer de text."
+   echo "    S'ha trobat un fitxer de tipus $mime"
+   usage
+   exit 1
+fi
+
+# Si el fitxer de text és UTF-8, llavors el convertim a ISO-8859-15
+if [[ "$mime" =~ "charset=utf-8" ]]; then
+   outfile="${infile}.tmp"
+   iconv -f UTF-8 -t ISO-8859-15//TRANSLIT//IGNORE -o $outfile $infile || \
+   ( echo "No s'ha pogut convertir $infile a ISO-8859-15."; exit 1 ) 
+else
+   outfile="$infile"
+fi
 
 # 
 
 # Separem els capitols
-bash divcapitols.sh $1
+divcapitols.sh "$infile"
 
 # Passem els capítols a mp3
 PISTA=0
 echo "$0 - Passant a mp3..."
-  for arxiu in ${1%.txt}/${1%.txt}"_-_"* ;
+  for fitxer in ${infile%.*}.tmp/${infile%.*}"_-_"* ;
   do
- 	bash text2mp3.sh $arxiu "$2" $PISTA;
+ 	text2mp3.sh "$fitxer" "$autor" "$PISTA";
 	PISTA=$[ $PISTA + 1 ]
   done
 echo "$0 - Hem acabat"
