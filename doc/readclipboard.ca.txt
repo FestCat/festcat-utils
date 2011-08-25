@@ -1,0 +1,99 @@
+
+#-----------------------------------------------------------
+# This small tutorial is distributed under license 
+# GNU Lesser General Public License (LGPL).
+# You can find it at: http://www.gnu.org/licenses
+#-----------------------------------------------------------
+# Antonio Bonafonte, UPC, Barcelona, 2009
+#-----------------------------------------------------------
+
+
+Com escoltar el contingut del porta-retalls usant les veus FESTCAT?
+(o en general, de Festival, des de gnome)
+
+---------------------------------
+1) Requisits
+---------------------------------
+    a) Una versió de Festival funcionant amb les veus catalanes
+       https://wiki.ubuntu.com/CatalanTeam/Tutorials/S%C3%ADntesiDeVeu
+    b) L'aplicació xclip (accessible pel repositori ubuntu)
+    c) perl (suposso que esta en totes les instalacions)
+
+---------------------------------
+2) Creació d'un script per llegir text des del porta-retalls, podent seleccionar la veu
+---------------------------------
+
+Pots instal·lar-lo així:
+cd /usr/bin
+sudo wget www.talp.cat/festcat/readclipboard
+
+Si ho prefereixes, pots copiar-lo a qualsevol lloc,
+per exemple en $HOME/readclipboard
+
+És un script molt curt. Cal passar el nom d'una veu
+instal·lada i llegeix mitjançant festival el que està seleccionat.
+
+---------------------------------
+3) Executar: exemple
+---------------------------------
+Selecciona text en alguna finestra, i:
+
+/usr/bin/readclipboard upc_ca_ona_hts
+(Es pot passar les veus instal·lades)
+
+Si està en el path (per exemple, /usr/bin) no és necessari
+especificar el path:
+
+readclipboard upc_ca_ona_hts
+
+
+Si quan llegeix és torna a cridar, interromp la lectura.
+
+Si el cridem sense argument, s'utilitza
+la veu per defecte, que es guarda a 
+en $HOME/.festcat/voice
+
+La primera vegada, la veu utilitzada és
+upc_ca_ona_hts
+
+
+---------------------------------
+4) Crear una drecera des del teclat
+---------------------------------
+He seguit les instruccions de:
+http://www.codejacked.com/create-custom-keyboard-shortcuts-in-linux/
+
+que són:
+
+a) Des d'una consola o mitjançant Alt-F2, introduir gconf-editor
+b) En gconf-editor triar apps>> Metacity>> keybinding_commands
+c) Dos clicks en un lliure, per exemple, command_1, i en valor posar,
+    per exemple,
+
+   /usr/bin/readclipboard
+
+   Pots utilitzar altres comandes per veus específiques, com per exemple,
+   en command_2 /usr/bin/readclipboard upc_ca_pau_hts
+   i en command_3  /usr/bin/readclipboard upc_ca_ona_clunits
+
+d) Selecciona apps>> Metacity>> global_keybindings i assignar una combinació
+    de tecles.
+    Per exemple, doble clic en run_command_1, i en valor escriure
+    <Control>F1
+    En run_command_2
+    <Control>F2
+    En run_command_3
+    <Control><Shift>F2
+
+    En escriure <ctrl>f2 llegeix el text seleccionat amb Pau
+    i amb <Ctrl><Shift>F2 ho fa Ona.
+    Amb <Ctrl>F1 el ultim locutor (o el indicat en $HOME/.festcat/voice)
+
+
+---------------------------------
+5) Creació d'un botó a la barra d'eines:
+---------------------------------
+    Botó de la dreta>> Afegeix al quadre >> Llançador d'aplicació personalitzat
+    A "Nom" donar-li el nom que vulguem ("llegir pau").
+    A "Ordre" introduir la comanda (/usr/bin/readclipboard upc_ca_pau_hts)
+    Amb un clic a icona podem posar una imatge.

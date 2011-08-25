@@ -1,0 +1,77 @@
+#!/bin/bash
+
+#-----------------------------------------------------------
+# This small script is distributed under license 
+# GNU Lesser General Public License (LGPL).
+# You can find it at: http://www.gnu.org/licenses
+#-----------------------------------------------------------
+# Antonio Bonafonte, UPC, Barcelona, 2009
+#-----------------------------------------------------------
+
+#-----------------------------------------------------------
+# (CATALA)  
+#-----------------------------------------------------------
+# Aquest script llegeix el porta-papers fent servir festival.
+# 
+# Us:
+#   readclipboard
+#       Si ja estava llegint, aborta el proces anterior (stop!)
+#       Sino, llegeix el text fent servir el locutor per defecte
+#       El locutor per defecte es upc_ca_ona_hts . 
+#       Es pot canviar en el fitxer 
+#       $HOME/.festcat/voice
+#
+#  readclipboard voice
+#       Com abans pero amb la veu indicada, que es guarda al fitxer 
+#       $HOME/.festcat/voice i per tant es la nova veu per defecte
+
+#-----------------------------------------------------------
+# (ENGLISH)
+#-----------------------------------------------------------
+# This script reads the clipboard using festival
+# 
+# Usage:
+#   readclipboard
+#       if a reading is going on, kill it and exit
+#       else read using the default speaker
+#       def. speaker: upc_ca_ona_hts .. can be changed 
+#       on $HOME/.festcat/voice
+#
+#  readclipboard voice
+#       read with voice and save as default voice in
+#       $HOME/.festcat/voice
+#
+
+which festival perl xclip > /dev/null || exit 1
+
+if [ -s $HOME/.festcat/pid ]; then
+   kill -9 `cat $HOME/.festcat/pid`
+   rm $HOME/.festcat/pid
+   exit 0;
+fi
+
+if [[ $# == 1 ]]; then
+  spk=$1;
+elif [ -s $HOME/.festcat/voice ]; then
+  spk=$(cat $HOME/.festcat/voice)
+else
+  spk="upc_ca_ona_hts"
+fi
+
+voice="(voice_$spk)"
+text=`xclip -o | perl -pe 'tr/"//d'`
+
+
+echo "
+$voice
+(SayText \"$text\")" | festival &
+
+pid=$!
+mkdir -p $HOME/.festcat/
+
+echo "$!" > $HOME/.festcat/pid
+echo "$spk" > $HOME/.festcat/voice
+wait
+rm $HOME/.festcat/pid
+
+exit 0;

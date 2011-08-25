@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Ús: bash $0 arxiu.txt [autor [pista]]
 # Escrit per Paco Rivière http://pacoriviere.cat - Juny 2008 - Per a Ubuntu Hardy 8.04 - Llicència GNU\GPL
 # 
@@ -15,10 +15,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-function ajuda {
-echo "Ús: bash $0 arxiu.txt [autor [pista]]"
-echo
-}
+. docfuncions
+usage=usage_veu
 
 function llegir () {
 echo "cat $1 | festival --tts"

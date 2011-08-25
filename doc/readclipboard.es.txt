@@ -1,0 +1,108 @@
+
+#-----------------------------------------------------------
+# This small tutorial is distributed under license 
+# GNU Lesser General Public License (LGPL).
+# You can find it at: http://www.gnu.org/licenses
+#-----------------------------------------------------------
+# Antonio Bonafonte, UPC, Barcelona, 2009
+#-----------------------------------------------------------
+
+
+Como leer el portapapeles usando las voces de FESTCAT?
+(o en general, de Festival, desde gnome)
+
+---------------------------------
+1) Requisitos
+---------------------------------
+   a) Una version funcionando de Festival con las voces catalanas
+      https://wiki.ubuntu.com/CatalanTeam/Tutorials/S%C3%ADntesiDeVeu
+
+   b) La aplicación xclip (accesible p.e. en repositorio ubuntu)
+
+
+---------------------------------
+2) Crear un script para leer texto desde portapapels, pudiendo seleccionar la voz
+---------------------------------
+
+Puedes instalarlo así:
+cd /usr/bin
+sudo wget www.talp.cat/festcat/readclipboard
+
+
+Si prefieres, puedes copiarlo en cualquier sitio,
+por ejemplo en $HOME/readclipboard 
+
+Es un script muy corto. Hay que pasarle el nombre de una voz
+instalada y lee mediante festival lo que está seleccionado.
+
+---------------------------------
+3) Ejecutar : ejemplo
+---------------------------------
+Seleccionar texto en alguna ventana, y:
+
+/usr/bin/readclipboard upc_ca_ona_hts
+(Se puede pasar las voces instaladas)
+
+Si está en el path (por ejemplo, /usr/bin) no es necesario
+especificar el path:
+
+readclipboard upc_ca_ona_hts
+
+Si mientras está leyendo se vuelve a llamar, 
+se interrumpe la lectura.
+
+
+Si se ejectua sin argumento se utiliza
+la voz por defecto, que se guarda
+en $HOME/.festcat/voice
+
+La primera vez que se utiliza, esta es
+upc_ca_ona_hts
+
+---------------------------------
+4) Crear un atajo desde el teclado
+---------------------------------
+He seguido las instrucciones de:
+http://www.codejacked.com/create-custom-keyboard-shortcuts-in-linux/
+
+que son:
+
+a) Desde una consola o mediante Alt-F2, introducir gconf-editor
+b) En gconf-editor elegir apps >> metacity >> keybinding_commands
+c) Doble click en uno libre, por ejemplo, command_1, y en valor poner,
+   por ejemplo,
+   /usr/bin/readclipboard
+   Puede utilizarse otros comandos para voces específicas, como por ejemplo,
+   en command_2
+   /usr/bin/readclipboard upc_ca_pau_hts
+   y en command_3
+   /usr/bin/readclipboard upc_ca_ona_clunits
+d) Seleccionar apps >> metacity >> global_keybindings y asignar una combinación
+   de teclas. 
+   Por ejemplo, doble click en run_command_1, y en valor escribir
+   <Control>F1
+   en run_command_2 <Control>F2
+   en run_command_3 <Control><Shitf>F2
+
+   Al escribir <ctrl>f2 lee el texto seleccionado con Pau, 
+   y con <Ctrl><Shift>f2 lo hace ona.
+   Con <ctrl><f1> lee con último locutor utilizado, o es que se
+   ponga en $HOME/.festcat/voice
+
+---------------------------------
+5) Crear un boton en barra de herramientas (se llama así?):
+---------------------------------
+   Boton de la derecha >> añadir al panel >> custom application launcher
+   En name darle el nombre que queramos (llegir ona).
+   En value introducir el comando (/usr/bin/readclipboard upc_ca_pau_hts)
+   Con click en icono podemos poner una image.
+
+
+
+   	
+   
+
+
+
+
+

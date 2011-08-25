@@ -25,6 +25,19 @@ cat << EOF
 EOF
 }
 
+function usage_veu() {
+cat << EOF
+Aquest script mostra un menú com a interfície als altres scripts.
+
+Ús:
+$0 arxiu.txt [autor [pista]]
+
+Paràmetres:
+
+EOF
+}
+
+
 
 function usage_divcapitols()
 {

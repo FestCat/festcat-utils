@@ -6,7 +6,7 @@
 # Aquest script està escrit suposant que tenim la veu catalana triada per omissió:
 # https://wiki.ubuntu.com/CatalanTeam/Tutorials/S%c3%adntesiDeVeu/Scripts
 
-. docfunctions.sh
+. docfunctions
 usage=usage_text2audio
 
 #Constants
@@ -125,9 +125,10 @@ if [ -f "$outwav" ]; then
 else
    echo "$0: S'està llegint l'arxiu en format wav"
 # Substituim caràcters problemàtics - Aportació d'Antonio Bonafonte
-   cat $infile | tr "\255\264\341\354\371" "-'\340\355\372" | tr -c  '\- \t\n\r[:alnum:]\341\340\351\350\355\354\363\362\372\371\374\357\347\361\301\300\311\310\315\314\323\322\332\331\334\317\307\321[]{}\272\252\\!|@"\267#\$~%&/()=?\047\277\241*+_.:,;<>\244' ' '  > /tmp/$$.txt
+   cat "$infile" | tr "\255\264\341\354\371" "-'\340\355\372" | tr -c  '\- \t\n\r[:alnum:]\341\340\351\350\355\354\363\362\372\371\374\357\347\361\301\300\311\310\315\314\323\322\332\331\334\317\307\321[]{}\272\252\\!|@"\267#\$~%&/()=?\047\277\241*+_.:,;<>\244' ' '  > "/tmp/$$.txt"
 # I llegim l'arxiu
-   LC_ALL=ca_ES text2wave -o $outwav /tmp/$$.txt
+# festival -b '(load "htslabel.scm")' -b '(voice_upc_ca_eli_hts)' -b '(SaveLabel "Hello world" "Test.lab")'
+   LC_ALL=ca_ES text2wave -o "$outwav" "/tmp/$$.txt"
    rm /tmp/$$.txt
 fi
 
