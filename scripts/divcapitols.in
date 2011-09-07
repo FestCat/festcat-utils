@@ -1,7 +1,22 @@
 #!/bin/bash
 # divcapitols.sh: Separa un fitxer.txt en els seu capítols
-# Escrit per Paco Rivière http://pacoriviere.cat - Juny 2008 - Per a Ubuntu Hardy 8.04 - Llicència GNU\GPL
-# Modificat per Sergio Oller sergioller@gmail.com - Agost 2011
+#    Copyright (C) 2008  Paco Rivière <http://pacoriviere.cat>
+#    Copyright (C) 2011  Sergio Oller <sergioller@gmail.com>
+#
+#    This library is free software; you can redistribute it and/or
+#    modify it under the terms of the GNU Lesser General Public
+#    License as published by the Free Software Foundation; either
+#    version 2.1 of the License, or (at your option) any later version.
+#
+#    This library is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#    Lesser General Public License for more details.
+#
+#    You should have received a copy of the GNU Lesser General Public
+#    License along with this library; if not, write to the Free Software
+#    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
 # Referències:
 # http://www.ncsa.uiuc.edu/UserInfo/Resources/Hardware/IBMp690/IBM/usr/share/man/info/en_US/a_doc_lib/cmds/aixcmds1/csplit.htm
 # http://www.opengroup.org/onlinepubs/000095399/utilities/csplit.html
