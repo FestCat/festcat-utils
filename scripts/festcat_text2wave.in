@@ -46,15 +46,11 @@
 ;;; Process command line arguments
 (define (text2wave_help)
   (format t "%s\n"
-  "text2wave [options] textfile
+  "festcat-text2wave [options] textfile
   Convert a textfile to a waveform
   Options
   -mode <string>  Explicit tts mode.
   -o ofile        File to save waveform (default is stdout).
-  -otype <string> Output waveform type: alaw, ulaw, snd, aiff, riff, nist etc.
-                  (default is riff)
-  -F <int>        Output frequency.
-  -scale <float>  Volume factor
   -eval <string>  File or lisp s-expression to be evaluated before
                   synthesis.
 ")
@@ -65,12 +61,10 @@
 
 ;;; Default argument values
 (defvar outfile "-")
-(defvar output_type 'riff)
-(defvar frequency nil)  ;; default is no frequency modification
 (defvar text_files '("-"))
 (defvar mode nil)
-(defvar volume "1.0")
 (defvar labelfiles nil)
+(defvar wavefiles nil)
 
 ;;; Get options
 (define (get_options)
@@ -112,14 +106,6 @@
   (format stderr "%s: %s\n" "text2wave" message)
   (text2wave_help))
 
-(define (save_record_wave utt)
-"Saves the waveform and records its so it can be joined into a 
-a single waveform at the end."
-  (let ((fn (make_tmp_filename)))
-    (utt.save.wave utt fn)
-    (set! wavefiles (cons fn wavefiles))
-    utt))
-
 
 (define (open_label utt)
 "Saves the waveform and records its so it can be joined into a 
@@ -134,46 +120,14 @@ a single waveform at the end."
 (fclose SaveLabel_fp)
 )
 
-(define (save_record_wave utt)
-"Saves the waveform and records its so it can be joined into a 
-a single waveform at the end."
-  (let ((fn (make_tmp_filename)))
-    (utt.save.wave utt fn)
-    (set! wavefiles (cons fn wavefiles))
-    utt))
-
-(define (combine_waves1)
-  "Join all the waves together into the desired output file
-and delete the intermediate ones."
-  (let ( (wholeutt (utt.synth (Utterance Text "")))
-         (fn (make_tmp_filename))
-         (firsttime t)
-       )
-    (mapcar
-     (lambda (d)
-       (system (string-append "sox " d "-r 16000 -c 1 -e signed -b 16 " d ".raw"))
-       (if (firsttime)
-            (system (string-append "cat " d ".raw >  " fn))
-            (system (string-append "cat " d ".raw >> " fn))
-       )
-       (set! firsttime nil)
-       (delete-file d)
-     )
-     (reverse wavefiles)
-    )
-    (system (string-append "sox -r 16000 -c 1 -e signed -b 16 " fn " " outfile))
-  )
-)
-
-
-(define (combine_waves2)
+(define (combine_waves_hts)
   "Join all the waves together into the desired output file
 and delete the intermediate ones."
   (let ( (guifn (make_tmp_filename))
          (guifd nil)
          (rawfn (string-append (make_tmp_filename) ".raw" ))
          (tmpargs hts_engine_params)
-         (festcat-hts-engine "/home/sergio/Source/festcat/festcat-hts-engine/src/festcat-hts_engine")
+         (festcat-hts-engine "__BINDIR__/festcat_hts_engine")
          (htscommand "")
        )
     (set! guifd (fopen guifn "w"))
@@ -200,25 +154,72 @@ and delete the intermediate ones."
   )
 )
 
+(define (save_record_wave utt)
+"Saves the waveform and records its so it can be joined into a 
+a single waveform at the end."
+  (let ((fn (make_tmp_filename)))
+    (utt.save.wave utt fn )
+    (set! wavefiles (cons fn wavefiles))
+    utt)
+)
+
+(define (combine_waves_nohts)
+  "Join all the waves together into the desired output file
+and delete the intermediate ones."
+  (let ( (rawfn (make_tmp_filename))
+         (firsttime t)
+       )
+    (mapcar
+     (lambda (d)
+       (system (string-append "sox " d "-r 16000 -c 1 -e signed -b 16 " d ".raw"))
+       (if (firsttime)
+            (system (string-append "cat " d ".raw > " rawfn))
+            (system (string-append "cat " d ".raw >> " rawfn))
+       )
+       (set! firsttime nil)
+       (delete-file d)
+     )
+     (reverse wavefiles)
+    )
+    (system (string-append "sox -r 16000 -c 1 -e signed -b 16 " rawfn " " outfile))
+  )
+)
+
 ;;;
 ;;; Redefine what happens to utterances during text to speech 
 ;;;
-(load "./htslabel.scm")
-(set! tts_hooks (list open_label utt.synth close_label))
+(require "__DATADIR__/htslabel")
 
 (define (main)
   (get_options)
+  (if (string-matches (string-append current-voice) ".*hts.*")
+     (begin
+      (set! tts_hooks (list open_label utt.synth close_label))
+      ;; generate labels
+      (mapcar
+       (lambda (f) 
+        (if mode
+          (tts_file f mode)
+	  (tts_file f (tts_find_text_mode f auto-text-mode-alist))))
+        text_files)
 
-  ;; do the synthesis
-  (mapcar
-   (lambda (f) 
-     (if mode
-	 (tts_file f mode)
-	 (tts_file f (tts_find_text_mode f auto-text-mode-alist))))
-   text_files)
+     ;; synthesize
+      (combine_waves_hts)
+     )
+     (begin 
+      (set! tts_hooks (list utt.synth save_record_wave))
+      ;; generate labels
+      (mapcar
+       (lambda (f) 
+        (if mode
+          (tts_file f mode)
+	  (tts_file f (tts_find_text_mode f auto-text-mode-alist))))
+        text_files)
 
-  ;; Now put the waveforms together at again
-  (combine_waves2)
+     ;; synthesize
+      (combine_waves_nohts)
+     )
+  )
 )
 
 ;;;  Do the work

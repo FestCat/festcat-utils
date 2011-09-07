@@ -1,0 +1,33 @@
+.TH TEXT2AUDIO 1 "August 2011" "text2audio: __PACKAGE_VERSION__"
+.SH NOM
+text2audio \- Converteix un fitxer de text en un fitxer d'àudio.
+.SH SINOPSI
+\&text2audio [\-a autor] [\-f ogg] [\-v upc_ca_ona] [-p 3] [-o llegit ] llibre.txt
+.SS "Paràmetres:"
+.HP
+\fB\-a\fR: Estableix l'etiqueta d'autor a l'audiollibre.
+.HP
+\fB\-v\fR: Tria la veu de Festival a utilitzar [upc_ca_ona].
+.HP
+\fB\-f\fR: Format de l'àudio [ogg].
+.HP
+\fB\-p\fR: Pista del fitxer d'àudio.
+.HP
+\fB\-o\fR: Fitxer d'àudio de sortida (sense extensió).
+.IP
+llibre.txt: Nom del fitxer de text a separar en capítols i convertir.
+.PP
+.SH DESCRIPCIÓ
+Aquest script pren un llibre en format «txt», el converteix a ISO-8859-15 i el neteja
+ i genera un fitxer d'àudio.
+.SH EXEMPLES
+Això genera el fitxer llibre.ogg:
+.IP
+text2audio -a "Raimon" -f "ogg" -v "upc_ca_ona" "llibre.txt"
+\".SH BUGS
+.SH AUTORS
+.IP
+ Sergio Oller <sergioller@gmail.com>
+ Paco Rivière
+ Antonio Bonafonte
+.HP

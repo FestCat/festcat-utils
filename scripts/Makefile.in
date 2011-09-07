@@ -73,30 +73,40 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+CAT = @CAT@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
+CSPLIT = @CSPLIT@
 CYGPATH_W = @CYGPATH_W@
+DATE = @DATE@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+ECHO = @ECHO@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
+FESTIVAL = @FESTIVAL@
+FILE = @FILE@
 GREP = @GREP@
+ICONV = @ICONV@
+ID3 = @ID3@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+KILL = @KILL@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
+MKDIR = @MKDIR@
 MKDIR_P = @MKDIR_P@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
@@ -107,10 +117,17 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PERL = @PERL@
+RM = @RM@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
+SOX = @SOX@
 STRIP = @STRIP@
+TR = @TR@
 VERSION = @VERSION@
+VORBISCOMMENT = @VORBISCOMMENT@
+XCLIP = @XCLIP@
+ZENITY = @ZENITY@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
@@ -153,8 +170,34 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-bin_SCRIPTS = audiollibre divcapitols festcat-text2wave \
-              readclipboard text2audio veu
+bin_SCRIPTS = audiollibre divcapitols festcat festcat_llegeix \
+              festcat_text2wave readclipboard text2audio 
+
+CLEANFILES = $(bin_SCRIPTS)
+EXTRA_DIST = audiollibre.in divcapitols.in festcat.in festcat_llegeix.in \
+              festcat_text2wave.in readclipboard.in text2audio.in 
+
+do_subst = sed -e 's|__BINDIR__|$(bindir)|g' \
+            -e 's|__SYSCONFDIR__|$(sysconfdir)/@PACKAGE@|g' \
+            -e 's|__SOX__|@SOX@|g' \
+            -e 's|__PERL__|@PERL@|g' \
+            -e 's|__ICONV__|@ICONV@|g' \
+            -e 's|__FILE__|@FILE@|g' \
+            -e 's|__CSPLIT__|@CSPLIT@|g' \
+            -e 's|__DATADIR__|$(pkgdatadir)|g' \
+            -e 's|__XCLIP__|@XCLIP@|g' \
+            -e 's|__GREP__|@GREP@|g' \
+            -e 's|__CAT__|@CAT@|g' \
+            -e 's|__TR__|@TR@|g' \
+            -e 's|__MKDIR__|@MKDIR@|g' \
+            -e 's|__RM__|@RM@|g' \
+            -e 's|__KILL__|@KILL@|g' \
+            -e 's|__FESTIVAL__|@FESTIVAL@|g' \
+            -e 's|__ECHO__|@ECHO@|g' \
+            -e 's|__ID3__|@ID3@|g' \
+            -e 's|__VORBISCOMMENT__|@VORBISCOMMENT@|g' \
+            -e 's|__DATE__|@DATE@|g' \
+            -e 's|__ZENITY__|@ZENITY@|g' 
 
 all: all-am
 
@@ -284,6 +327,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -371,6 +415,10 @@ uninstall-am: uninstall-binSCRIPTS
 	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
 	pdf-am ps ps-am uninstall uninstall-am uninstall-binSCRIPTS
 
+
+%: %.in
+	$(do_subst) < $< > $@
+	chmod +x $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

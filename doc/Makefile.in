@@ -33,7 +33,9 @@ NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
 subdir = doc
-DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+DIST_COMMON = $(dist_debianicon_DATA) $(dist_doc_DATA) \
+	$(dist_xdgicon_DATA) $(srcdir)/Makefile.am \
+	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -64,8 +66,11 @@ am__nobase_list = $(am__nobase_strip_setup); \
 am__base_list = \
   sed '$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;$$!N;s/\n/ /g' | \
   sed '$$!N;$$!N;$$!N;$$!N;s/\n/ /g'
-am__installdirs = "$(DESTDIR)$(docdir)"
-DATA = $(doc_DATA)
+am__installdirs = "$(DESTDIR)$(desktopmenudir)" \
+	"$(DESTDIR)$(debianicondir)" "$(DESTDIR)$(docdir)" \
+	"$(DESTDIR)$(xdgicondir)"
+DATA = $(desktopmenu_DATA) $(dist_debianicon_DATA) $(dist_doc_DATA) \
+	$(dist_xdgicon_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -73,30 +78,40 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+CAT = @CAT@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
+CSPLIT = @CSPLIT@
 CYGPATH_W = @CYGPATH_W@
+DATE = @DATE@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+ECHO = @ECHO@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
+FESTIVAL = @FESTIVAL@
+FILE = @FILE@
 GREP = @GREP@
+ICONV = @ICONV@
+ID3 = @ID3@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
+KILL = @KILL@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
+MKDIR = @MKDIR@
 MKDIR_P = @MKDIR_P@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
@@ -107,10 +122,17 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PERL = @PERL@
+RM = @RM@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
+SOX = @SOX@
 STRIP = @STRIP@
+TR = @TR@
 VERSION = @VERSION@
+VORBISCOMMENT = @VORBISCOMMENT@
+XCLIP = @XCLIP@
+ZENITY = @ZENITY@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
@@ -153,9 +175,15 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-doc_DATA = ACKNOWLEDGEMENTS LICENSE readclipboard.ca.txt \
-           readclipboard.es.txt README
-
+dist_doc_DATA = readclipboard.ca.txt
+EXTRA_DIST = festcat-utils.desktop.in festcat-utils.xcf
+debianicondir = $(datadir)/pixmaps
+dist_debianicon_DATA = festcat-utils.xpm 
+xdgicondir = $(datadir)/icons/hicolor/48x48/apps
+dist_xdgicon_DATA = festcat-utils.png 
+desktopmenudir = $(datadir)/applications
+desktopmenu_DATA = festcat-utils.desktop
+CLEANFILES = $(desktopmenu_DATA) *~
 all: all-am
 
 .SUFFIXES:
@@ -189,10 +217,50 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
-install-docDATA: $(doc_DATA)
+install-desktopmenuDATA: $(desktopmenu_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(desktopmenudir)" || $(MKDIR_P) "$(DESTDIR)$(desktopmenudir)"
+	@list='$(desktopmenu_DATA)'; test -n "$(desktopmenudir)" || list=; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(desktopmenudir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(desktopmenudir)" || exit $$?; \
+	done
+
+uninstall-desktopmenuDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(desktopmenu_DATA)'; test -n "$(desktopmenudir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	test -n "$$files" || exit 0; \
+	echo " ( cd '$(DESTDIR)$(desktopmenudir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(desktopmenudir)" && rm -f $$files
+install-dist_debianiconDATA: $(dist_debianicon_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(debianicondir)" || $(MKDIR_P) "$(DESTDIR)$(debianicondir)"
+	@list='$(dist_debianicon_DATA)'; test -n "$(debianicondir)" || list=; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(debianicondir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(debianicondir)" || exit $$?; \
+	done
+
+uninstall-dist_debianiconDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(dist_debianicon_DATA)'; test -n "$(debianicondir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	test -n "$$files" || exit 0; \
+	echo " ( cd '$(DESTDIR)$(debianicondir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(debianicondir)" && rm -f $$files
+install-dist_docDATA: $(dist_doc_DATA)
 	@$(NORMAL_INSTALL)
 	test -z "$(docdir)" || $(MKDIR_P) "$(DESTDIR)$(docdir)"
-	@list='$(doc_DATA)'; test -n "$(docdir)" || list=; \
+	@list='$(dist_doc_DATA)'; test -n "$(docdir)" || list=; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
@@ -202,13 +270,33 @@ install-docDATA: $(doc_DATA)
 	  $(INSTALL_DATA) $$files "$(DESTDIR)$(docdir)" || exit $$?; \
 	done
 
-uninstall-docDATA:
+uninstall-dist_docDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(doc_DATA)'; test -n "$(docdir)" || list=; \
+	@list='$(dist_doc_DATA)'; test -n "$(docdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	test -n "$$files" || exit 0; \
 	echo " ( cd '$(DESTDIR)$(docdir)' && rm -f" $$files ")"; \
 	cd "$(DESTDIR)$(docdir)" && rm -f $$files
+install-dist_xdgiconDATA: $(dist_xdgicon_DATA)
+	@$(NORMAL_INSTALL)
+	test -z "$(xdgicondir)" || $(MKDIR_P) "$(DESTDIR)$(xdgicondir)"
+	@list='$(dist_xdgicon_DATA)'; test -n "$(xdgicondir)" || list=; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(xdgicondir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(xdgicondir)" || exit $$?; \
+	done
+
+uninstall-dist_xdgiconDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(dist_xdgicon_DATA)'; test -n "$(xdgicondir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	test -n "$$files" || exit 0; \
+	echo " ( cd '$(DESTDIR)$(xdgicondir)' && rm -f" $$files ")"; \
+	cd "$(DESTDIR)$(xdgicondir)" && rm -f $$files
 tags: TAGS
 TAGS:
 
@@ -250,7 +338,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(docdir)"; do \
+	for dir in "$(DESTDIR)$(desktopmenudir)" "$(DESTDIR)$(debianicondir)" "$(DESTDIR)$(docdir)" "$(DESTDIR)$(xdgicondir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -270,6 +358,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -298,7 +387,8 @@ info: info-am
 
 info-am:
 
-install-data-am: install-docDATA
+install-data-am: install-desktopmenuDATA install-dist_debianiconDATA \
+	install-dist_docDATA install-dist_xdgiconDATA
 
 install-dvi: install-dvi-am
 
@@ -342,21 +432,29 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-docDATA
+uninstall-am: uninstall-desktopmenuDATA uninstall-dist_debianiconDATA \
+	uninstall-dist_docDATA uninstall-dist_xdgiconDATA
 
 .MAKE: install-am install-strip
 
 .PHONY: all all-am check check-am clean clean-generic distclean \
 	distclean-generic distdir dvi dvi-am html html-am info info-am \
 	install install-am install-data install-data-am \
-	install-docDATA install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-man install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-generic pdf \
-	pdf-am ps ps-am uninstall uninstall-am uninstall-docDATA
+	install-desktopmenuDATA install-dist_debianiconDATA \
+	install-dist_docDATA install-dist_xdgiconDATA install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-info install-info-am install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-generic pdf pdf-am ps ps-am uninstall uninstall-am \
+	uninstall-desktopmenuDATA uninstall-dist_debianiconDATA \
+	uninstall-dist_docDATA uninstall-dist_xdgiconDATA
 
+
+festcat-utils.desktop:
+	cp festcat-utils.desktop.in festcat-utils.desktop
+	chmod +x festcat-utils.desktop
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

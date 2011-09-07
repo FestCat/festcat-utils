@@ -1,0 +1,13 @@
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=FestCat
+GenericName=Conversor de text a àudio
+Comment=Converteix text a àudio, a un fitxer o pels altaveus.
+Exec=festcat
+Icon=festcat-utils
+Terminal=false
+Categories=GTK;GNOME;Qt;KDE;Utility;Accessibility;
+
+Name[ca_ES]=FestCat

@@ -1,0 +1,308 @@
+function init_entorn()
+{
+BINDIR="__BINDIR__"
+SYSCONFDIR="__SYSCONFDIR__"
+SOX="__SOX__"
+PERL="__PERL__"
+ICONV="__ICONV__"
+FILE="__FILE__"
+CSPLIT="__CSPLIT__"
+DATADIR="__DATADIR__"
+XCLIP="__XCLIP__"
+CAT="__CAT__"
+MKDIR="__MKDIR__"
+TR="__TR__"
+RM="__RM__"
+GREP="__GREP__"
+ZENITY="__ZENITY__"
+KILL="__KILL__"
+FESTIVAL="__FESTIVAL__"
+ECHO="__ECHO__"
+#WAIT ## bashism?
+ID3="__ID3__"
+VORBISCOMMENT="__VORBISCOMMENT__"
+DATE="__DATE__"
+
+AUDIOLLIBRE="${BINDIR}/audiollibre"
+DIVCAPITOLS="${BINDIR}/divcapitols"
+FESTCAT_BIN="${BINDIR}/festcat"
+FESTCAT_LLEGEIX="${BINDIR}/festcat_llegeix"
+FESTCAT_TEXT2WAVE="${BINDIR}/festcat_text2wave"
+READCLIPBOARD="${BINDIR}/readclipboard"
+TEXT2AUDIO="${BINDIR}/text2audio"
+VEU="${BINDIR}/veu"
+
+FESTCAT_HTS_ENGINE="${BINDIR}/festcat_hts_engine"
+# etc:
+SYSCONF_CONFIG="${SYSCONFDIR}/festcat.conf"
+if [ -d "${XDG_CONFIG_HOME}" ];then
+   HOME_CONFIG="${XDG_CONFIG_HOME}/festcat/festcat.conf"
+else
+   HOME_CONFIG="${HOME}/.config/festcat/festcat.conf"
+fi
+
+${MKDIR} -p $(dirname "$HOME_CONFIG")
+
+carrega_config
+
+}
+
+function echoverb()
+{
+  if [ $verbose -gt $2 ];then
+     ${ECHO} "$1"
+  fi
+}
+
+function extensions_disponibles()
+{
+LANG=C ${SOX} -h | ${GREP} "AUDIO FILE FORMATS"
+}
+
+function usage_audiollibre()
+{
+${CAT} << EOF
+Aquest script genera un audiollibre a partir d'un fitxer de text.
+Ús:
+$0 [-a autor] [-f ogg] fitxer.txt
+
+Paràmetres:
+ -a: Estableix l'etiqueta d'autor a l'audiollibre.
+ -v: Tria la veu.
+ -f: Extensió del fitxer de sortida [ogg]. Extensions disponibles:
+EOF
+extensions_disponibles
+argdescription_divcapitols
+${CAT} << EOF
+
+ fitxer.txt: Nom del fitxer de text a separar en capítols.
+
+EOF
+}
+
+function usage_festcat() {
+${ZENITY} --info --title="FestCat: Ajuda" --text="Ajuda no escrita encara, si tens dubtes usa el <a href=\"http://ubuntuforums.org/showthread.php?t=806060&amp;page=4\">fòrum</a>."
+}
+
+
+
+function usage_divcapitols()
+{
+${CAT} << EOF
+Aquest script separa un fitxer de text en diversos fitxers.
+Està pensat per dividir un llibre en capítols.
+
+Ús:
+$0 [ ( -m 1|2|3|4 ) | ( -c REGEX ) ] [ -o dirsortida] fitxer.txt
+
+Paràmetres:
+EOF
+argdescription_divcapitols
+${CAT} << EOF
+ -o: Directori de sortida dels capítols
+
+ fitxer.txt: Nom del fitxer de text a separar en capítols.
+EOF
+}
+
+function argdescription_divcapitols()
+{
+${CAT} << EOF
+ -m: Determina com es reconeixen els títols de capítols
+    1: Els capítols comencen amb: "Capítol 1" (mode predefinit)
+    2: Els capítols comencen només amb el nombre: "1"
+    3: Format Projecte Gutemberg: "Capítol I"
+    4: Format Manybooks: "I"
+    5: Manuals (a): "1 Títol del capítol..." o "1. Títol del capítol..."
+
+ -c: Especifica una expressió regular personalitzada per identificar l'inici dels capítols.
+EOF
+}
+
+
+function setregex_divcapitols()
+{
+         case "$1" in
+            1) 
+               regex="/^Capítol /";;
+            2) 
+               regex="/^[0-9][0-9]*$/";;
+            3) 
+               regex="/^Capítol M{0,4}(CM|CD|D?C{0,4})(XC|XL|L?X{0,4})(IX|IV|V?I{0,4})$/";;
+            4) 
+               regex= "/^M{0,4}(CM|CD|D?C{0,4})(XC|XL|L?X{0,4})(IX|IV|V?I{0,4})$/";; # el {0,4} admet nombres com XXXX (tot i que no són correctes realment)
+            5) 
+               regex="/^[0-9][0-9]*\.?\s?[A-Za-z0-9]*/";;
+            [?])
+               echo "Aquest mode no està definit.";;
+         esac
+}
+
+
+function usage_text2audio()
+{
+${CAT} << EOF
+Aquest script sintetitza un fitxer de text en un fitxer d'àudio.
+Ús:
+$0 [ -a autor ] [-p pista] [-f format ] fitxer.txt
+
+Paràmetres:
+ -a: Estableix l'autor del fitxer de text en les propietats del fitxer d'àudio.
+ -p: Estableix el número de pista, útil per llibres.
+ -f: Determina el format del fitxer de sortida. Extensions disponibles:
+EOF
+extensions_disponibles
+${CAT} << EOF
+
+ fitxer.txt: Fitxer a convertir
+EOF
+}
+
+
+function valida_audio_ext()
+{
+local avalext=$( extensions_disponibles | tail -c +20)
+if [[ "$avalext" =~ "$1" ]]; then
+   return 0
+fi
+${CAT} << EOF
+$0
+ERROR:
+Sembla que «$1» no és una extensió suportada.
+Algun d'aquests paquets pot ser-vos útil:
+libsox-fmt-all, libmp3lame0
+Tingueu present que formats com «mp3» no són lliures i poden tenir patents a alguns països.
+EOF
+exit 1
+}
+
+function voice_exists()
+{
+local veu="$1"
+${FESTIVAL} -b "(voice_${veu})"
+}
+
+function carrega_config()
+{
+if [ "$CONFIG_CARREGAT" = "1" ] ; then
+   return
+fi
+DEFAULT_VOICE="upc_ca_ona_hts"
+
+if [ -s "${SYSCONF_CONFIG}" ];then
+   . "${SYSCONF_CONFIG}" || ( ${ECHO} "Error in \"${SYSCONF_CONFIG}\""; exit 1 )
+fi
+
+if [ ! -d "$HOME/.festcat/" ];then
+   ${MKDIR} -p "$HOME/.festcat/"
+fi
+
+if [ -s "$HOME/.festcat/festcat.conf" ];then
+   . "$HOME/.festcat/festcat.conf" || ( ${ECHO} "Error in \"$HOME/.festcat/festcat.conf\""; exit 1 )
+fi
+
+voice_exists "${DEFAULT_VOICE}"
+if [  "$?" -ne 0 ];then
+   ${ECHO} "La veu $DEFAULT_VOICE no està disponible" 
+   DEFAULT_VOICE=$(${FESTIVAL} -b '(print (car (voice.list)))')
+   ${ECHO} "Usant la veu: $DEFAULT_VOICE"
+fi
+CONFIG_CARREGAT="1"
+
+}
+
+function es_textfile()
+{
+  local infile="$1"
+  local mime
+  mime=$( ${FILE} -ib "$infile" )
+
+  if [[ ! "$mime" =~ "text" ]]; then
+    ${ECHO} "$0: Cal indicar un fitxer de text."
+    ${ECHO} "    S'ha trobat un fitxer de tipus $mime"
+    $usage
+    exit 1
+  fi
+
+}
+
+function clean_file()
+{
+   local mymime
+   local tmpfile="$1"
+   local output=$(${CAT} "${tmpfile}")
+   
+   mymime=$(${FILE} -ib "${tmpfile}")
+   if [[ "$mymime" =~ "charset=utf-8" ]]; then
+      output=$(echo ${output} | ${ICONV} -f UTF-8 -t ISO-8859-15//TRANSLIT//IGNORE )
+   fi
+   output=$( echo ${output} |  ${TR} "\255\264\341\354\371" "-'\340\355\372" | \
+              ${TR} -c  '\- \t\n\r[:alnum:]\341\340\351\350\355\354\363\362\372\371\374\357\347\361\301\300\311\310\315\314\323\322\332\331\334\317\307\321[]{}\272\252\\!|@"\267#\$~%&/()=?\047\277\241*+_.:,;<>\244' ' ' )
+
+   ${ECHO} "${output}"
+}
+
+
+function clean_string()
+{
+   local tmpfile
+   local output
+   tmpfile="/tmp/festcat_$$_$RANDOM.txt"
+   ${ECHO} "$1" > ${tmpfile}
+   output=$(clean_file "${tmpfile}")
+   ${RM} ${tmpfile}
+   ${ECHO} "${output}"
+}
+
+function llegeix()
+{
+   local text="$1"
+   local veu="$2"
+   local tornaja=""
+   if [ $# == 3 ]; then
+     tornaja=" &"
+   fi
+   ${FESTIVAL} -b "(voice_$veu)" -b "(SayText \"${text}\")" $tornaja
+}
+
+
+function tria_veu()
+{
+local zen
+local voices
+local veutriada
+local currvoice
+
+# We create the home config file if it does not exist:
+if [ ! -f "${HOME_CONFIG}" ]; then
+   mkdir -p $(basename "${HOME_CONFIG}" ".conf")
+   touch "${HOME_CONFIG}"
+fi
+
+# FIXME: This is not beautiful:
+currvoice=$(cat "${HOME_CONFIG}" | sed -e '/DEFAULT_VOICE/!d' -e 's:^DEFAULT_VOICE="\(.*\)":\1:' )
+
+voices=$(echo '(print (voice.list))' | festival | tr -d '()' | sed -e 's/voice_//g') 
+zen=""
+for v in $voices;do
+  if [ "$v" = "$currvoice" ];then
+    ${ECHO} "Current voice was: $v"
+    zen="$zen TRUE $v"
+  else
+    zen="$zen FALSE $v"
+  fi
+done
+veutriada=$(zenity --list --title "FestCat: Tria de veu" --text 'Trieu una veu per FestCat' --radiolist --column "Tria" --column "Veus disponibles" $zen)
+if [ "$?" != 0 -o "$veutriada" = "" ]; then
+   echo "Error al triar la veu"
+   exit 1
+fi
+
+if [[ $(cat "${HOME_CONFIG}") =~ "^DEFAULT_VOICE" ]];then
+   sed -i "s:^DEFAULT_VOICE=\"$currvoice\":DEFAULT_VOICE=\"${veutriada}\":g" "${HOME_CONFIG}"
+else
+    ${ECHO} "DEFAULT_VOICE=\"${veutriada}\"" >> "${HOME_CONFIG}"
+    ${ECHO} >> "${HOME_CONFIG}"
+fi
+
+}

@@ -8,16 +8,29 @@
 # http://gnosis.cx/publish/programming/text_utils.html
 # Nombres romans: http://regexlib.com/REDetails.aspx?regexp_id=128
 
-. docfunctions.sh
+DATADIR="__DATADIR__"
+. ${DATADIR}/docfunctions
 usage=usage_divcapitols
+init_entorn # incialitza variables
+
 infile=
 regex="/Capítol /"
-while getopts "hm:c:" option;
+outdir=""
+divcap_pref=""
+divcap_prefset=0
+while getopts "hm:c:o:f:" option;
 do
    case "$option" in
       h) 
          $usage
          exit 0
+         ;;
+      o)
+         outdir="$OPTARG"
+         ;;
+      f)
+         divcap_pref="$OPTARG"
+         divcap_prefset=1
          ;;
       m) 
          setregex_divcapitols "$OPTARG" ;;
@@ -29,41 +42,36 @@ done
 shift $(($OPTIND - 1)) 
 
 if [ $# = 0 ]; then
-   echo "$0: Cal indicar un fitxer de text."
+   ${ECHO} "$0: Cal indicar un fitxer de text."
    $usage
    exit 1
 fi
 infile="$1"
 
 
-# Comprovem que s'ha indicat el fitxer a convertir 
-mime=$( file -ib "$infile" )
-if [[ ! "$mime" =~ "text" ]]; then
-   echo "$0: Cal indicar un fitxer de text."
-   echo "    S'ha trobat un fitxer de tipus $mime"
-   $usage
-   exit 1
-fi
+es_textfile "${infile}"
 
 #Creem un directori per desar els fitxers
-outdir=${infile%.*}.dir
-mkdir ${outdir}
+if [ "$outdir" = "" ];then
+   outdir=${infile%.*}.dir
+fi
+
+divcap_base=$(basename ${infile%.*})
+
+if [ $divcap_prefset -eq 0 ];then
+   divcap_pref="${outdir}/${divcap_base}-"
+fi
+
+${MKDIR} -p "${outdir}"
 
 # Separem els capítols
-  csplit -s -b "%02d.txt" -f "${outdir}//${infile%.*}_-_Capítol_" ${infile} ${regex} "{*}"
 
-# Afegim l'extensió .txt
-#  for fitxer in ${outdir}/${infile%.*}"_-_"* ;
-#  do
-#	mv "$fitxer" "$fitxer.txt";
-#  done
+${CSPLIT} -s -b "%02d.txt" -f ${divcap_pref} "${infile}" "${regex}" "{*}"
+
 
 # Informem del resultat
-if [ $? == 0 ]; then 
-   echo "S'han creat els fitxers dels capítols"
-   exit 0
-else
-   echo "S'ha trobat un error inesperat"
+if [ $? != 0 ]; then 
+   ${ECHO} "No s'han pogut creat els capítols amb divcapitols. Error de csplit"
    exit 1
 fi
 

@@ -1,0 +1,56 @@
+#!/bin/bash
+
+#-----------------------------------------------------------
+# This small script is distributed under license 
+# GNU Lesser General Public License (LGPL).
+# You can find it at: http://www.gnu.org/licenses
+#-----------------------------------------------------------
+# Antonio Bonafonte, UPC, Barcelona, 2009
+#-----------------------------------------------------------
+
+DATADIR="__DATADIR__"
+. ${DATADIR}/docfunctions
+usage=usage_readclipboard
+init_entorn # incialitza variables
+
+if [ -s "$HOME/.festcat/readclipboard_pid" ]; then
+   ${KILL} -9 $(${CAT} "$HOME/.festcat/readclipboard_pid")
+   ${RM} "$HOME/.festcat/readclipboard_pid"
+   exit 0;
+fi
+
+voice=""
+while getopts "hv:" option;
+do
+   case "$option" in
+      h) 
+         $usage
+         exit 0
+         ;;
+      v) 
+         voice="$OPTARG"
+         ;;
+    [?]) 
+         $usage
+         exit ;;
+   esac
+done
+
+if [ "$voice" = "" ]; then
+   voice="${DEFAULT_VOICE}"
+fi
+
+text=$(${XCLIP} -o | ${PERL} -pe 'tr/"//d')
+text=$(clean_string "${text}")
+
+#${FESTIVAL} -b "(voice_$voice)" -b "(SayText \"${text}\")" &
+llegeix "$voice" "$text" 1
+
+pid=$!
+${MKDIR} -p "$HOME/.festcat/"
+
+${ECHO} "$!" > "$HOME/.festcat/readclipboard_pid"
+wait
+${RM} "$HOME/.festcat/readclipboard_pid"
+
+exit 0;

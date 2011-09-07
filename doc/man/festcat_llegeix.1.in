@@ -1,0 +1,22 @@
+.TH FESTCAT_LLEGEIX 1 "August 2011" "festcat_llegeix: @PACKAGE_VERSION@"
+.SH NOM
+festcat_llegeix \- Sintetitza en veu alta un fitxer de text.
+.SH SINOPSI
+\&festcat_llegeix [\-v upc_ca_ona] fitxer.txt
+.SS "Paràmetres:"
+.HP
+\fB\-v\fR: Tria la veu de Festival a utilitzar [upc_ca_ona].
+.IP
+fitxer.txt: Nom del fitxer de text a separar en capítols i convertir.
+.PP
+.SH DESCRIPCIÓ
+Aquest script pren un fitxer de text i el sintetitza en veu alta.
+.SH EXEMPLES
+festcat_llegeix -v "upc_ca_ona" fitxer.txt
+\".SH BUGS
+.SH AUTORS
+.IP
+ Sergio Oller <sergioller@gmail.com>
+ Paco Rivière
+ Antonio Bonafonte
+.HP

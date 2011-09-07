@@ -1,0 +1,15 @@
+.TH FESTCAT 1 "August 2011" "festcat: __PACKAGE_VERSION__"
+.SH NOM
+festcat \- Menú gràfic de les eines de FestCat.
+.SH DESCRIPCIÓ
+festcat mostra un menú a partir del qual es poden usar els diferents scripts de
+ __PACKAGE_NAME__. Això inclou crear un audiollibre, convertir un fitxer de text
+ a àudio, escoltar text pels altaveus...
+\".SH EXEMPLES
+\".SH BUGS
+.SH AUTORS
+.IP
+ Sergio Oller <sergioller@gmail.com>
+ Paco Rivière
+ Antonio Bonafonte
+.HP

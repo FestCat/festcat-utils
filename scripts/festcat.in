@@ -1,0 +1,155 @@
+#!/bin/bash
+# Ús: bash $0 arxiu.txt [autor [pista]]
+# Escrit per Paco Rivière http://pacoriviere.cat - Juny 2008 - Per a Ubuntu Hardy 8.04 - Llicència GNU\GPL
+# Modificat per Sergio Oller sergioller@gmail.com - Agost 2011
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; version 2 of the License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Library General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+DATADIR="__DATADIR__"
+. ${DATADIR}/docfunctions
+usage=usage_festcat
+init_entorn # incialitza variables
+
+
+function tria_fitxer()
+{
+  local fitx=$(zenity --file-selection --title "$1")
+  if [ "$?" != 0 ]; then
+     exit 1
+  fi
+  ${ECHO} "$fitx"
+}
+
+function tria_format()
+{
+oext=$(zenity --list --title "Format" --text "$1" --radiolist --column "Tria" --column "Formats" \
+     TRUE "ogg" FALSE "mp3" FALSE "wav" FALSE "Un altre")
+if [ "$?" != 0 ]; then
+  exit 1
+fi
+if [ "$oext" = "Un altre" ];then
+  oext=$(zenity --entry --title "Extensió de sortida" --text "Escriviu l'extensió (usualment tres lletres)")
+fi
+if [ "$?" != 0 ]; then
+  exit 1
+fi
+${ECHO} "$oext"
+}
+
+function tria_autor()
+{
+oext="$1"
+autor=""
+if [ "$oext" = "mp3" -o "$oext" = "ogg" ]; then
+  autor=$(zenity --entry --title "Autor" --text "Autor del text:")
+  if [ "$?" != 0 -o "$autor" = "" ]; then
+     exit 0
+  fi
+fi
+${ECHO} "$autor"
+}
+
+function tria_capitols()
+{
+   local opt
+   opt=$(zenity --list --title "Format dels capítols" --text "Com estan separats els capítols?" --radiolist --column "Tria" --column "Exemple" \
+                  --column "opt" --hide-column=3 --print-column=3  \
+                  TRUE "Els capítols comencen amb: \"Capítol 1\"" 1 \
+                 FALSE "Els capítols comencen només amb el nombre: \"1\"" 2 \
+                 FALSE "Format Projecte Gutemberg: \"Capítol I\"" 3 \
+                 FALSE "Format Manybooks: \"I\"" 4 \
+                 FALSE "Manuals (a): \"1 Títol del capítol...\" o \"1. Títol del capítol...\"" 5 \
+                 FALSE "Un altre (avançat: cal saber l'expressió regular)" 6)
+   
+   if [ "$?" != 0 ]; then
+     exit 1
+   fi
+   if [ $opt = 6 ];then
+      regex=$(zenity --entry --title "Expressió regular" --text "Escriu l'expressió regular")
+      ${ECHO} $regex
+      return
+   fi
+   setregex_divcapitols  $opt
+   ${ECHO} ${regex}
+   return
+}
+
+verbose=0
+while getopts "hV" option;
+do
+   case "$option" in
+      h) $usage
+         exit 0
+         ;;
+      V)
+         verbose=$(expr $verbose + 1)
+         ;;
+    [?]) 
+         $usage
+         exit ;;
+   esac
+done
+
+# Menu i bucle principal
+while true ;
+do
+        opt=$(zenity --list --title "FestCat: Menú Principal" --text 'Trieu una opció' \
+               --radiolist --column "Tria" --column "Opcions disponibles" --column "opt" --hide-column=3 --print-column=3 \
+               FALSE "Llegir en veu alta" 1 \
+               FALSE "Convertir text a àudio"   2 \
+               FALSE "Crear un audiollibre (Per separar capítols)" 3 \
+               FALSE "Canviar la veu (i idioma)" 4 \
+               FALSE "Ajuda" 5 \
+               FALSE "Sortir" 0 )
+        if [ "$?" != 0 ]; then
+            exit 0
+        fi
+	case "$opt" in
+          0 ) # Sortir
+              exit 0
+              ;;
+	  1 )  # Llegir
+              infile=$(tria_fitxer "Trieu el fitxer a llegir")
+              echoverb "A llegir: $infile" 0
+              ${FESTCAT_LLEGEIX} "$infile"
+              ;;
+	  2 ) # text -> audio
+              infile=$(tria_fitxer "Trieu el fitxer a convertir a àudio")
+              echoverb "A convertir: $infile" 0
+              oext=$(tria_format "Trieu el format de l'àudio")
+              echoverb "Al format: $oext" 0
+              autor=$(tria_autor "$oext")
+              echoverb "Amb autor: $autor" 0
+              if [ "$autor" != "" ]; then
+                 autor=" -a $autor "
+              fi
+              ${TEXT2AUDIO} -f "$oext" $autor "$infile"
+              ;;
+	  3 ) # Audiollibre
+              infile=$(tria_fitxer "Trieu el fitxer a llegir")
+              echoverb "A convertir: $infile" 0
+              oext=$(tria_format "Trieu el format de l'àudio")
+              echoverb "Al format: $oext" 0
+              autor=$(tria_autor "$oext")
+              echoverb "Amb autor: $autor" 0
+              if [ "$autor" != "" ]; then
+                 autor=" -a $autor "
+              fi
+              regex=$(tria_capitols )
+              echoverb "Fent ús de l'expressió regular: $regex" 0
+              ${AUDIOLLIBRE} -f "$oext" -c "$regex" $autor "$infile"  ;;
+	  4 ) tria_veu ;;
+	  5 ) $usage ;;
+	esac
+done

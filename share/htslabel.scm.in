@@ -24,4 +24,3 @@ TEXT, a string. Label generated"
    (fclose SaveLabel_fp)
  filename
 )
-

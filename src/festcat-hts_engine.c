@@ -74,10 +74,11 @@ HTS_ENGINE_C_START;
 /* Usage: output usage */
 void Usage(void)
 {
+   fprintf(stderr,"festcat-hts_engine:\n");
+   fprintf(stderr, "Copyright (C)  %s %s\n", "2011", "Sergio Oller");
+   fprintf(stderr, "All rights reserved.\n\n");
+   fprintf(stderr,"hts_engine:");
    HTS_show_copyright(stderr);
-   fprintf(stderr, "\n");
-   fprintf(stderr,
-           "hts_engine - The HMM-based speech synthesis engine \"hts_engine API\"\n");
    fprintf(stderr, "\n");
    fprintf(stderr, "  usage:\n");
    fprintf(stderr, "       hts_engine [ options ] [ infile ] \n");

@@ -1,0 +1,27 @@
+.TH READCLIPBOARD 1 "August 2011" "readclipboard: __PACKAGE_VERSION__"
+.SH NOM
+readclipboard \- Llegeix el contingut del portarretalls.
+.SH SINOPSI
+\&festcat_text2wave [opcions] entrada.txt
+.SS "Paràmetres:"
+.HP
+\fB\-v\fR: Veu amb la qual es vol sintetitzar el text
+.PP
+.SH DESCRIPCIÓ i ÚS
+Aquest script reprodueix pels altaveus el text copiat al portarretalls.
+Selecciona text en alguna finestra, i executa:
+readclipboard 
+
+Si executa readclipboard mentre encara està llegint, interromp la lectura.
+
+festcat(1) permet definir la veu utilitzada.
+
+.SH EXEMPLES
+readclipboard -v "upc_ca_ona_hts"
+\".SH BUGS
+.SH AUTORS
+.IP
+ Sergio Oller <sergioller@gmail.com>
+ Paco Rivière
+ Antonio Bonafonte
+.HP

@@ -73,8 +73,8 @@ c) Dos clicks en un lliure, per exemple, command_1, i en valor posar,
    /usr/bin/readclipboard
 
    Pots utilitzar altres comandes per veus específiques, com per exemple,
-   en command_2 /usr/bin/readclipboard upc_ca_pau_hts
-   i en command_3  /usr/bin/readclipboard upc_ca_ona_clunits
+   en command_2 /usr/bin/readclipboard -v upc_ca_pau_hts
+   i en command_3  /usr/bin/readclipboard -v upc_ca_ona_clunits
 
 d) Selecciona apps>> Metacity>> global_keybindings i assignar una combinació
     de tecles.
@@ -95,5 +95,22 @@ d) Selecciona apps>> Metacity>> global_keybindings i assignar una combinació
 ---------------------------------
     Botó de la dreta>> Afegeix al quadre >> Llançador d'aplicació personalitzat
     A "Nom" donar-li el nom que vulguem ("llegir pau").
-    A "Ordre" introduir la comanda (/usr/bin/readclipboard upc_ca_pau_hts)
+    A "Ordre" introduir la comanda (/usr/bin/readclipboard -v upc_ca_pau_hts)
     Amb un clic a icona podem posar una imatge.
+
+#-----------------------------------------------------------
+# (CATALA)  
+#-----------------------------------------------------------
+# Aquest script llegeix el porta-papers fent servir festival.
+# 
+# Us:
+#   readclipboard
+#       Si ja estava llegint, aborta el proces anterior (stop!)
+#       Sino, llegeix el text fent servir el locutor per defecte
+#       El locutor per defecte es upc_ca_ona_hts . 
+#
+#  readclipboard -v voice
+#       Com abans pero amb la veu indicada, que es guarda al fitxer 
+#       $HOME/.config/festcat/festcat.conf i per tant es la nova veu per defecte
+
+

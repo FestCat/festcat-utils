@@ -1,0 +1,177 @@
+.TH FESTCAT_HTS_ENGINE 1 "August 24, 2011" "1.0"
+.SH NOM
+festcat_hts_engine \- Sintetitzador d'etiquetes per veus HTS
+.SH SINOPSI
+.B festcat_hts_engine
+.RI [ options ] [ infile ]
+.SH DESCRIPCIÓ
+La comanda 
+.B festcat_hts_engine
+permet sintetitzar text a partir dels fitxers d'etiquetes generades amb festival, OpenMary o altres.
+Requereix un model HTS, com les veus HTS de FestCat.
+ La diferència principal respecte hts_engine és que festcat_hts_engine està pensat per llegir un fitxer guia,
+ que contingui a cada línea el nom d'un fitxer d'etiquetes.
+.PP
+.SH OPCIONS
+A summary of options is included below.
+.TP
+.B \-td tree
+decision tree files for state duration
+.TP
+.B \-tm tree
+decision tree files for spectrum
+.TP
+.B \-tf tree
+decision tree files for Log F0
+.TP
+.B \-tl tree
+decision tree files for low-pass filter
+.TP
+.B \-md pdf
+model files for state duration
+.TP
+.B \-mm pdf
+model files for spectrum
+.TP
+.B \-mf pdf
+model files for Log F0
+.TP
+.B \-ml pdf
+model files for low-pass filter
+.TP
+.B \-dm win
+window files for calculation delta of spectrum
+.TP
+.B \-df win
+window files for calculation delta of Log F0
+.TP
+.B \-dl win
+window files for calculation delta of low-pass filter
+.TP
+.B \-od s
+filename of output label with duration
+.TP
+.B \-om s
+filename of output spectrum
+.TP
+.B \-of s
+filename of output Log F0
+.TP
+.B \-ol s
+filename of output low-pass filter
+.TP
+.B \-or s
+filename of output raw audio (generated speech)
+.TP
+.B \-ow s
+filename of output wav audio (generated speech)
+.TP
+.B \-ot s
+filename of output trace information
+.TP
+.B \-vp
+use phoneme alignment for duration
+.TP
+.B \-i f1 .. fi  [    1][   1-- ]
+enable interpolation & specify number(i),coefficient(f)
+.TP
+.B \-s i [16000][   1--48000]
+sampling frequency
+.TP
+.B \-p i [   80][   1--]
+frame period (point)
+.TP
+.B \-a f [ 0.42][ 0.0--1.0]
+all-pass constant
+.TP
+.B \-g i [    0][   0-- ]
+gamma = -1 / i (if i=0 then gamma=0)
+.TP
+.B \-b f [  0.0][-0.8--0.8]
+postfiltering coefficient
+.TP
+.B \-l
+regard input as log gain and output linear one (LSP)
+.TP
+.B \-r f [  1.0][ 0.0--10.0]
+speech speed rate
+.TP
+.B \-fm f [  0.0][-24.0--24.0]
+add half-tone
+.TP
+.B \-u f [  0.5][ 0.0--1.0]
+voiced/unvoiced threshold
+.TP
+.B \-em tree
+decision tree files for GV of spectrum
+.TP
+.B \-ef tree
+decision tree files for GV of Log F0
+.TP
+.B \-el tree
+decision tree files for GV of low-pass filter
+.TP
+.B \-cm pdf
+filenames of GV for spectrum
+.TP
+.B \-cf pdf
+filenames of GV for Log F0
+.TP
+.B \-cl pdf
+filenames of GV for low-pass filter
+.TP
+.B \-jm f [  1.0][ 0.0--2.0]
+weight of GV for spectrum
+.TP
+.B \-jf f [  1.0][ 0.0--2.0]
+weight of GV for Log F0
+.TP
+.B \-jl f [  1.0][ 0.0--2.0]
+weight of GV for low-pass filter
+
+.TP
+.B \-k tree
+GV switch
+.TP
+.B \-z i [ 1600][   0--48000]
+audio buffer size
+.TP
+.B infile Fitxer guia
+
+note:
+option '-d' may be repeated to use multiple delta parameters.
+generated spectrum, log F0, and low-pass filter coefficient
+sequences are saved in natural endian, binary (float) format.
+
+.SH SEE ALSO
+.BR festival (1),
+.SH AUTHOR
+This manual page was written by Sergio Oller <sergioller@gmail.com> 
+based on the hts_engine --help, for the Debian project (and may be used by others).
+.SH COPYRIGHT
+.B festcat_hts_engine:
+ Copyright (C)  2011 Sergio Oller
+ All rights reserved.
+
+.B hts_engine:
+ The HMM-Based Speech Synthesis Engine "hts_engine API"
+ hts_engine API version 1.05 (http://hts-engine.sourceforge.net/)
+ Copyright (C)
+.BR
+ 2001-2011  Nagoya Institute of Technology
+.BR
+ 2001-2008  Tokyo Institute of Technology
+ All rights reserved.
+
+.TP
+ The HMM-Based Speech Synthesis Engine "hts_engine API" hts_engine API version 1.05 (http://hts-engine.sourceforge.net/)
+.TP
+ Copyright (C)
+.BR
+ 2001-2011  Nagoya Institute of Technology
+.BR
+ 2001-2008  Tokyo Institute of Technology
+.BR
+ All rights reserved.
+.PP
+

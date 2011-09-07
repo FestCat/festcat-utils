@@ -1,0 +1,30 @@
+.TH FESTCAT_TEXT2WAVE 1 "August 2011" "festcat_text2wave: __PACKAGE_VERSION__"
+.SH NOM
+festcat_text2wave \- Sintetitza un fitxer de text en ISO-8859-15.
+.SH SINOPSI
+\&festcat_text2wave [opcions] entrada.txt
+.SS "Paràmetres:"
+.HP
+\fB\-mode\fR: Mode de tts de Festival.
+.HP
+\fB\-o\fR: Nom del fitxer de sortida (amb extensió per determinar el format).
+.HP
+\fB\-eval\fR: Instruccions SCHEME a avaluar abans de la síntesi (per triar una veu, per exemple).
+.HP
+entrada.txt: Nom del fitxer de text a llegir.
+.PP
+.SH DESCRIPCIÓ
+Si voleu sintetitzar en àudio un fitxer de text, és recomanable usar text2audio, ja que neteja i converteix el text.
+Aquest script sintetitza un fitxer de text de manera semblant a text2wave. La diferència principal respecte
+el text2wave original és que requereix menys memòria per llibres grans i és lleguerament més ràpid computant si la veu és HTS.
+A més també suporta els mateixos formats de sortida que sox.
+El contrapunt és que té més dependències (crida a festcat_hts_engine i a sox, per exemple).
+.SH EXEMPLES
+audiollibre -a "Raimon" -f "ogg" -v "upc_ca_ona" -m 3 "llibre.txt"
+\".SH BUGS
+.SH AUTORS
+.IP
+ Sergio Oller <sergioller@gmail.com>
+ Paco Rivière
+ Antonio Bonafonte
+.HP

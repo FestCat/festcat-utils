@@ -1,0 +1,37 @@
+.TH AUDIOLLIBRE 1 "August 2011" "audiollibre: __PACKAGE_VERSION__"
+.SH NOM
+audiollibre \- Separa un llibre en format «txt» en capítols i els converteix a àudio.
+.SH SINOPSI
+\&audiollibre [\-a autor] [\-f ogg] [\-v upc_ca_ona] [-m 2 | -c "Chapter [0-9]+"] llibre.txt
+.SS "Paràmetres:"
+.HP
+\fB\-a\fR: Estableix l'etiqueta d'autor a l'audiollibre.
+.HP
+\fB\-v\fR: Tria la veu de Festival a utilitzar [upc_ca_ona].
+.HP
+\fB\-f\fR: Format de l'àudio [ogg].
+.HP
+\fB\-m\fR: Determina com es reconeixen els títols de capítols.
+.IP
+ 1: Els capítols comencen amb: "Capítol 1" (mode predefinit)
+ 2: Els capítols comencen només amb el nombre: "1"
+ 3: Format Projecte Gutemberg: "Capítol I"
+ 4: Format Manybooks: "I"
+ 5: Manuals (a): "1 Títol del capítol..." o "1. Títol del capítol..."
+.HP
+\fB\-c\fR: Especifica una expressió regular personalitzada per identificar l'inici dels capítols.
+.IP
+llibre.txt: Nom del fitxer de text a separar en capítols i convertir.
+.PP
+.SH DESCRIPCIÓ
+Aquest script pren un llibre en format «txt», el separa en capítols i genera un fitxer
+d'àudio per cada capítol.
+.SH EXEMPLES
+audiollibre -a "Raimon" -f "ogg" -v "upc_ca_ona" -m 3 "llibre.txt"
+\".SH BUGS
+.SH AUTORS
+.IP
+ Sergio Oller <sergioller@gmail.com>
+ Paco Rivière
+ Antonio Bonafonte
+.HP
