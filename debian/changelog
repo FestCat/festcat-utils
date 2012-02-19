@@ -1,0 +1,48 @@
+festcat-utils (1.2.1-1) maverick; urgency=low
+
+  * New upstream version.
+    - Patches applied upstream.
+  * License is now GPL.
+  * Fixed debian/watch
+
+ -- Sergio Oller <sergioller@gmail.com>  Sun, 28 Aug 2011 17:46:53 +0200
+
+festcat-utils (1.1-4) maverick; urgency=low
+
+  * New option added to FestCat. Write text and say it.
+  * festcat_llegeix allows to read from stdin.
+
+ -- Sergio Oller <sergioller@gmail.com>  Sun, 28 Aug 2011 17:09:19 +0200
+
+festcat-utils (1.1-3) maverick; urgency=low
+
+  * Arreglat problema amb readclipboard i el background
+
+ -- Sergio Oller <sergioller@gmail.com>  Sun, 28 Aug 2011 04:21:24 +0200
+
+festcat-utils (1.1-2) maverick; urgency=low
+
+  * Two usage fixed (festcat_llegeix and readclipboard)
+  * Fixed the order of the parameters to "llegeix" function.
+
+ -- Sergio Oller <sergioller@gmail.com>  Sun, 28 Aug 2011 02:12:10 +0200
+
+festcat-utils (1.1-1) maverick; urgency=low
+
+  * New Upstream Release
+     - Menu integration with ubuntu (xdg) and debian
+  * Fixed icon name.
+
+ -- Sergio Oller <sergioller@gmail.com>  Sat, 27 Aug 2011 18:32:58 +0200
+
+festcat-utils (1.0-2) maverick; urgency=low
+
+  * Fix icon 
+
+ -- Sergio Oller <sergioller@gmail.com>  Sat, 27 Aug 2011 15:59:58 +0200
+
+festcat-utils (1.0-1) maverick; urgency=low
+
+  * Initial release
+
+ -- Sergio Oller <sergioller@gmail.com>  Sat, 27 Aug 2011 02:21:31 +0200
