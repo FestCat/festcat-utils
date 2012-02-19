@@ -53,7 +53,7 @@ text=$(${XCLIP} -o | ${PERL} -pe 'tr/"//d')
 text=$(clean_string "${text}")
 
 #${FESTIVAL} -b "(voice_$voice)" -b "(SayText \"${text}\")" &
-llegeix "$voice" "$text" 1
+llegeix  "$text" "$voice" 1
 
 pid=$!
 ${MKDIR} -p "$HOME/.festcat/"

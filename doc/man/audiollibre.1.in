@@ -2,14 +2,18 @@
 .SH NOM
 audiollibre \- Separa un llibre en format «txt» en capítols i els converteix a àudio.
 .SH SINOPSI
-\&audiollibre [\-a autor] [\-f ogg] [\-v upc_ca_ona] [-m 2 | -c "Chapter [0-9]+"] llibre.txt
+\&audiollibre [\-a autor] [\-t títol] [\-o direct. sortida] [\-f ogg] [\-v upc_ca_ona] [-m 2 | -c "Chapter [0-9]+"] llibre.txt
 .SS "Paràmetres:"
+.HP
+\fB\-t\fR: Estableix l'etiqueta del títol a l'audiollibre.
 .HP
 \fB\-a\fR: Estableix l'etiqueta d'autor a l'audiollibre.
 .HP
 \fB\-v\fR: Tria la veu de Festival a utilitzar [upc_ca_ona].
 .HP
 \fB\-f\fR: Format de l'àudio [ogg].
+.HP
+\fB\-o\fR: Directori de sortida on es desaran els fitxers d'àudio.
 .HP
 \fB\-m\fR: Determina com es reconeixen els títols de capítols.
 .IP

@@ -2,17 +2,20 @@
 .SH NOM
 festcat_llegeix \- Sintetitza en veu alta un fitxer de text.
 .SH SINOPSI
-\&festcat_llegeix [\-v upc_ca_ona] fitxer.txt
+\&festcat_llegeix [\-v upc_ca_ona] [fitxer.txt]
 .SS "Paràmetres:"
 .HP
 \fB\-v\fR: Tria la veu de Festival a utilitzar [upc_ca_ona].
+.HP
+\fB\-V\fR: Mostra més informació
 .IP
-fitxer.txt: Nom del fitxer de text a separar en capítols i convertir.
+fitxer.txt: Fitxer a llegir. Si no s'especifica cap, es llegeix de l'entrada estàndard.
 .PP
 .SH DESCRIPCIÓ
 Aquest script pren un fitxer de text i el sintetitza en veu alta.
 .SH EXEMPLES
 festcat_llegeix -v "upc_ca_ona" fitxer.txt
+festcat_llegeix -v "upc_ca_ona" <<< "Hola amics"
 \".SH BUGS
 .SH AUTORS
 .IP

@@ -20,11 +20,9 @@ el text2wave original és que requereix menys memòria per llibres grans i és l
 A més també suporta els mateixos formats de sortida que sox.
 El contrapunt és que té més dependències (crida a festcat_hts_engine i a sox, per exemple).
 .SH EXEMPLES
-audiollibre -a "Raimon" -f "ogg" -v "upc_ca_ona" -m 3 "llibre.txt"
+festcat_text2wave -o "audio.ogg" -eval "(voice_upc_ca_ona_hts)" "llibre.txt"
 \".SH BUGS
 .SH AUTORS
 .IP
  Sergio Oller <sergioller@gmail.com>
- Paco Rivière
- Antonio Bonafonte
 .HP

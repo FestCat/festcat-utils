@@ -22,6 +22,14 @@ DATADIR="__DATADIR__"
 usage=usage_festcat
 init_entorn # incialitza variables
 
+function escriu_text()
+{
+  text=$(zenity --text-info --editable --title "$1" --width 500 --height 300)
+  if [ $? -ne 0 ]; then
+     exit 0
+  fi
+  ${ECHO} "$text"
+}
 
 function tria_fitxer()
 {
@@ -107,25 +115,31 @@ while true ;
 do
         opt=$(zenity --list --title "FestCat: Menú Principal" --text 'Trieu una opció' \
                --radiolist --column "Tria" --column "Opcions disponibles" --column "opt" --hide-column=3 --print-column=3 \
-               FALSE "Llegir en veu alta" 1 \
-               FALSE "Convertir text a àudio"   2 \
-               FALSE "Crear un audiollibre (Per separar capítols)" 3 \
-               FALSE "Canviar la veu (i idioma)" 4 \
-               FALSE "Ajuda" 5 \
-               FALSE "Sortir" 0 )
+               TRUE  "Escriure un text i llegir-lo en veu alta" 00 \
+               FALSE "Llegir un fitxer en veu alta" 10 \
+               FALSE "Convertir text a àudio"   20 \
+               FALSE "Crear un audiollibre (Per separar capítols)" 30 \
+               FALSE "Canviar la veu (i idioma)" 40 \
+               FALSE "Ajuda" 50 \
+               FALSE "Sortir" 60 )
         if [ "$?" != 0 ]; then
             exit 0
         fi
 	case "$opt" in
-          0 ) # Sortir
+          60 ) # Sortir
               exit 0
               ;;
-	  1 )  # Llegir
+          00 )  # Llegir
+              text=$(escriu_text "Escriviu el text a llegir")
+              echoverb "A llegir: $infile" 0
+              ${FESTCAT_LLEGEIX} <<< "${text}"
+              ;;
+	  10 )  # Llegir
               infile=$(tria_fitxer "Trieu el fitxer a llegir")
               echoverb "A llegir: $infile" 0
               ${FESTCAT_LLEGEIX} "$infile"
               ;;
-	  2 ) # text -> audio
+	  20 ) # text -> audio
               infile=$(tria_fitxer "Trieu el fitxer a convertir a àudio")
               echoverb "A convertir: $infile" 0
               oext=$(tria_format "Trieu el format de l'àudio")
@@ -137,7 +151,7 @@ do
               fi
               ${TEXT2AUDIO} -f "$oext" $autor "$infile"
               ;;
-	  3 ) # Audiollibre
+	  30 ) # Audiollibre
               infile=$(tria_fitxer "Trieu el fitxer a llegir")
               echoverb "A convertir: $infile" 0
               oext=$(tria_format "Trieu el format de l'àudio")
@@ -150,7 +164,7 @@ do
               regex=$(tria_capitols )
               echoverb "Fent ús de l'expressió regular: $regex" 0
               ${AUDIOLLIBRE} -f "$oext" -c "$regex" $autor "$infile"  ;;
-	  4 ) tria_veu ;;
-	  5 ) $usage ;;
+	  40 ) tria_veu ;;
+	  50 ) $usage ;;
 	esac
 done

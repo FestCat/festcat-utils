@@ -1,7 +1,7 @@
 #!/bin/bash
 # text2audio: Converteix un arxiu de text a un format d'audio 
-# llegint-lo amb Festival, afegint el nom de l'arxiu a l'etiqueta mp3 
-# del títol, i opcionalment l'autor
+# llegint-lo amb Festival, afegint el nom de l'arxiu al
+# títol, i opcionalment l'autor
 #    Copyright (C) 2008  Paco Rivière <http://pacoriviere.cat>
 #    Copyright (C) 2011  Sergio Oller <sergioller@gmail.com>
 #
@@ -33,9 +33,11 @@ PISTA=1
 oext="ogg"
 voice="$DEFAULT_VOICE"
 verbose=0
-outfile=""
+outfile=
+title=
+infile=
 
-while getopts "ha:p:f:v:V" option;
+while getopts "ha:p:f:v:Vo:t:" option;
 do
    case "$option" in
       h) $usage
@@ -59,6 +61,9 @@ do
       o)
          outfile="$OPTARG"
          ;;
+      t)
+         title="$OPTARG"
+         ;;
     [?]) 
          $usage
          exit ;;
@@ -71,19 +76,33 @@ voice_exists "$voice" || exit 1
 echoverb "Usant la veu: «$voice»" 0
 valida_audio_ext "$oext"
 
+# L'argument que queda és el pressumpte fitxer de text a llegir:
 if [ $# = 0 ]; then
-   ${ECHO} "Cal indicar un fitxer de text."
-   $usage
-   exit 1
+   text=$(${CAT})
+   text=$(clean_string ${text})
+else
+   infile="$1"
+   es_textfile "$infile" # Comprovem que és un fitxer de text
+   echoverb "El fitxer «$infile» és de text" 0
+   text=$(clean_file "${infile}")
+fi
+echoverb "Text a llegir: «$text»" 1
+
+if [-z $infile -a -z $outfile ];then
+  ${ECHO} "Especifiqueu un fitxer d'entrada o un nom pel fitxer de sortida"
+  ${ECHO} "Usant audio.$oext"
+  outfile="audio.$oext"
 fi
 
-infile="$1"
+if [ -z $outfile ];then # outfile not specified, we create it
+   outfile=${infile%.*}.$oext
+elif [ ! "${outfile/*./}" = "$oext" ]; then # outfile specified, we add the right extension if necessary
+   outfile=${outfile}.$oext
+fi
 
-es_textfile "${infile}"
-tmpfile="/tmp/$$_$RANDOM.txt"
-${ECHO} $(clean_file  "${infile}") > "$tmpfile"
-
-outfile=${infile%.*}.$oext
+if [ -z $title ]; then
+   title=$(basename "${infile%.*}")
+fi
 
 # Abans de començar comprovem si existeix l'arxiu oext, per no perdre el temps
 if [ -f "$outfile" ]; then
@@ -98,7 +117,6 @@ EOF
 read Opcio
   case "$Opcio" in
    0) 
-     ${RM} "${tmpfile}"
       exit 1
       ;;
    1) 
@@ -113,13 +131,12 @@ read Opcio
 fi
 
 ${ECHO} "S'està llegint l'arxiu..."
-${FESTCAT_TEXT2WAVE} -eval "(voice_${voice})" -o "$outfile" "${tmpfile}"
-${RM} "${tmpfile}"
+${FESTCAT_TEXT2WAVE} -eval "(voice_${voice})" -o "$outfile" <<< "${text}"
 
 
 
 if [ "$oext" = "mp3" ]; then
-   ${ID3} -t "${infile%.*}"                         \
+   ${ID3} -t "${title}"                             \
           -a "$autor"                               \
           -g "Speech"                               \
           -T "$PISTA"                               \
@@ -129,7 +146,7 @@ if [ "$oext" = "mp3" ]; then
           "${outfile}" > /dev/null
 
 elif [ "$oext" = "ogg" ]; then
-   ${VORBISCOMMENT} -t "TITLE=${infile%.*}"   \
+   ${VORBISCOMMENT} -t "TITLE=${title}"   \
                  -t "ARTIST=$autor"        \
                  -t "ALBUM=${infile%_-_*}" \
                  -t "GENRE=Speech"         \

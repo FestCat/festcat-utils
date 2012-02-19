@@ -2,11 +2,11 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.67])
-AC_INIT([festcat-utils], [1.1], sergioller@gmail.com)
+AC_INIT([festcat-utils], [1.3], sergioller@gmail.com)
 AC_COPYRIGHT(Copyright 2009-2011 Sergio Oller)
 AC_COPYRIGHT(Copyright 2009-2011 Paco Rivière)
 AC_COPYRIGHT(Copyright 2009-2011 Antonio Bonafonte)
-AM_INIT_AUTOMAKE([festcat-utils], [1.1])
+AM_INIT_AUTOMAKE([festcat-utils], [1.3])
 AC_CONFIG_SRCDIR([src/festcat-hts_engine.c])
 
 # Checks for programs.

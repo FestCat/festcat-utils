@@ -36,8 +36,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;;  Text to a single waveform like festival_client but without
-;;;  starting hte server
+;;;  starting the server
 ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;         Modified: Sergio Oller <sergioller@gmail.com
+;;;             Date: Aug 2011
+;;;          Changes: 
+;;;                   * Final concatenation using sox (uses less memory)
+;;;                   * If voice is HTS, use the festcat_hts_engine
+;;;                     to avoid loading HTS models every time.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;; Because this is a --script type file I has to explicitly
 ;;; load the initfiles: init.scm and user's .festivalrc
@@ -60,7 +68,7 @@
 (gc-status nil)
 
 ;;; Default argument values
-(defvar outfile "-")
+(defvar outfile "audio.ogg")
 (defvar text_files '("-"))
 (defvar mode nil)
 (defvar labelfiles nil)

@@ -14,6 +14,10 @@
 #    License along with this library; if not, write to the Free Software
 #    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+# These functions can be heavily changed because the festcat-utils
+# is not considered stable yet.
+# If you want to use them, email me <sergioller@gmail.com> and
+# I will standarize them more.
 
 function init_entorn()
 {
@@ -58,6 +62,7 @@ else
    HOME_CONFIG="${HOME}/.config/festcat/festcat.conf"
 fi
 
+FESTCAT_TMPDIR=${TMPDIR-/tmp/}
 ${MKDIR} -p $(dirname "$HOME_CONFIG")
 
 carrega_config
@@ -84,8 +89,10 @@ Aquest script genera un audiollibre a partir d'un fitxer de text.
 $0 [-a autor] [-f ogg] fitxer.txt
 
 Paràmetres:
+ -t: Estableix el títol de l'audiollibre
  -a: Estableix l'etiqueta d'autor a l'audiollibre.
  -v: Tria la veu.
+ -o: Estableix el directori de sortida de tots els fitxers d'àudio.
  -f: Extensió del fitxer de sortida [ogg]. Extensions disponibles:
 EOF
 extensions_disponibles
@@ -97,9 +104,6 @@ ${CAT} << EOF
 EOF
 }
 
-function usage_festcat() {
-${ZENITY} --info --title="FestCat: Ajuda" --text="Ajuda no escrita encara, si tens dubtes usa el <a href=\"http://ubuntuforums.org/showthread.php?t=806060&amp;page=4\">fòrum</a>."
-}
 
 
 
@@ -122,6 +126,11 @@ ${CAT} << EOF
 EOF
 }
 
+function usage_festcat()
+{
+${ZENITY} --info --title="FestCat: Ajuda" --text="Ajuda no escrita encara, si tens dubtes usa el <a href=\"http://ubuntuforums.org/showthread.php?t=806060&amp;page=4\">fòrum</a>."
+}
+
 function argdescription_divcapitols()
 {
 ${CAT} << EOF
@@ -133,6 +142,33 @@ ${CAT} << EOF
     5: Manuals (a): "1 Títol del capítol..." o "1. Títol del capítol..."
 
  -c: Especifica una expressió regular personalitzada per identificar l'inici dels capítols.
+EOF
+}
+
+
+function usage_readclipboard()
+{
+${CAT} << EOF
+Aquest script reprodueix el contingut del portarretalls.
+Ús:
+readclipboard [opcions]
+
+Paràmetres:
+ -v: Tria la veu.
+EOF
+}
+
+function usage_festcat_llegeix()
+{
+${CAT} << EOF
+Aquest script llegeix en veu alta el fitxer especificat.
+Ús:
+festcat_llegeix [opcions] [fitxer.txt]
+
+Paràmetres:
+ -v: Tria la veu.
+ -V: Mostra informació de depuració.
+ fitxer.txt: Fitxer a llegir. Si no s'especifica cap, s'espera l'entrada estàndard.
 EOF
 }
 
@@ -164,8 +200,10 @@ Aquest script sintetitza un fitxer de text en un fitxer d'àudio.
 $0 [ -a autor ] [-p pista] [-f format ] fitxer.txt
 
 Paràmetres:
+ -t: Estableix el títol del fitxer d'àudio.
  -a: Estableix l'autor del fitxer de text en les propietats del fitxer d'àudio.
  -p: Estableix el número de pista, útil per llibres.
+ -o: Estableix el nom del fitxer de sortida.
  -f: Determina el format del fitxer de sortida. Extensions disponibles:
 EOF
 extensions_disponibles
@@ -210,12 +248,8 @@ if [ -s "${SYSCONF_CONFIG}" ];then
    . "${SYSCONF_CONFIG}" || ( ${ECHO} "Error in \"${SYSCONF_CONFIG}\""; exit 1 )
 fi
 
-if [ ! -d "$HOME/.festcat/" ];then
-   ${MKDIR} -p "$HOME/.festcat/"
-fi
-
-if [ -s "$HOME/.festcat/festcat.conf" ];then
-   . "$HOME/.festcat/festcat.conf" || ( ${ECHO} "Error in \"$HOME/.festcat/festcat.conf\""; exit 1 )
+if [ -s "${HOME_CONFIG}" ];then
+   . "${HOME_CONFIG}" || ( ${ECHO} "Error in \"${HOME_CONFIG}\""; exit 1 )
 fi
 
 voice_exists "${DEFAULT_VOICE}"
@@ -264,7 +298,7 @@ function clean_string()
 {
    local tmpfile
    local output
-   tmpfile="/tmp/festcat_$$_$RANDOM.txt"
+   tmpfile="${FESTCAT_TMPDIR}/festcat_$$_$RANDOM.txt"
    ${ECHO} "$1" > ${tmpfile}
    output=$(clean_file "${tmpfile}")
    ${RM} ${tmpfile}
@@ -275,11 +309,11 @@ function llegeix()
 {
    local text="$1"
    local veu="$2"
-   local tornaja=""
-   if [ $# == 3 ]; then
-     tornaja=" &"
+   if [ $# -eq 3 ]; then
+     ${FESTIVAL} -b "(voice_$veu)" -b "(SayText \"${text}\")" &
+   else
+     ${FESTIVAL} -b "(voice_$veu)" -b "(SayText \"${text}\")"
    fi
-   ${FESTIVAL} -b "(voice_$veu)" -b "(SayText \"${text}\")" $tornaja
 }
 
 

@@ -2,10 +2,12 @@
 .SH NOM
 text2audio \- Converteix un fitxer de text en un fitxer d'àudio.
 .SH SINOPSI
-\&text2audio [\-a autor] [\-f ogg] [\-v upc_ca_ona] [-p 3] [-o llegit ] llibre.txt
+\&text2audio [\-t títol] [\-a autor] [\-f ogg] [\-v upc_ca_ona] [-p 3] [-o llegit ] llibre.txt
 .SS "Paràmetres:"
 .HP
 \fB\-a\fR: Estableix l'etiqueta d'autor a l'audiollibre.
+.HP
+\fB\-t\fR: Estableix el títol de l'audiollibre.
 .HP
 \fB\-v\fR: Tria la veu de Festival a utilitzar [upc_ca_ona].
 .HP
@@ -14,6 +16,8 @@ text2audio \- Converteix un fitxer de text en un fitxer d'àudio.
 \fB\-p\fR: Pista del fitxer d'àudio.
 .HP
 \fB\-o\fR: Fitxer d'àudio de sortida (sense extensió).
+.HP
+\fB\-V\fR: Mostra més informació.
 .IP
 llibre.txt: Nom del fitxer de text a separar en capítols i convertir.
 .PP
@@ -23,7 +27,7 @@ Aquest script pren un llibre en format «txt», el converteix a ISO-8859-15 i el
 .SH EXEMPLES
 Això genera el fitxer llibre.ogg:
 .IP
-text2audio -a "Raimon" -f "ogg" -v "upc_ca_ona" "llibre.txt"
+text2audio -a "Raimon" -f "ogg" -v "upc_ca_ona" -o "aventures" "llibre.txt"
 \".SH BUGS
 .SH AUTORS
 .IP
