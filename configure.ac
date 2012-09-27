@@ -6,7 +6,7 @@ AC_INIT([festcat-utils], [1.3], sergioller@gmail.com)
 AC_COPYRIGHT(Copyright 2009-2011 Sergio Oller)
 AC_COPYRIGHT(Copyright 2009-2011 Paco Rivière)
 AC_COPYRIGHT(Copyright 2009-2011 Antonio Bonafonte)
-AM_INIT_AUTOMAKE([festcat-utils], [1.3])
+AM_INIT_AUTOMAKE([festcat-utils], [1.11.3])
 AC_CONFIG_SRCDIR([src/festcat-hts_engine.c])
 
 # Checks for programs.
@@ -112,7 +112,7 @@ AC_SUBST(ID3)
 
 AC_PATH_PROG([VORBISCOMMENT], [vorbiscomment], [/usr/bin], [$PATH])
 if test ! -f "$VORBISCOMMENT"; then
-	AC_MSG_ERROR(Can't find VORBISCOMMENT)
+	AC_MSG_ERROR(Can't find VORBISCOMMENT, try installing vorbis-tools or a similar package.)
 fi
 AC_SUBST(VORBISCOMMENT)
 
@@ -122,13 +122,13 @@ if test ! -f "$DATE"; then
 fi
 AC_SUBST(DATE)
 
+# Checks for header files.
+AC_INCLUDES_DEFAULT ()
+AC_CHECK_HEADERS([HTS_engine.h],[],AC_MSG_ERROR(Can't find HTS_engine.h))
 
 # Checks for libraries.
-AC_CHECK_LIB(htsengine, HTS_show_copyright)
+AC_CHECK_LIB([HTSEngine],[HTS_show_copyright],[],AC_MSG_ERROR(Can't find HTSEngine shared library))
 
-# Checks for header files.
-AC_CHECK_HEADERS([stdio.h stdarg.h math.h stdlib.h string.h])
-AC_CHECK_HEADERS([HTS_engine.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIZE_T
