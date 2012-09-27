@@ -88,19 +88,19 @@ else
 fi
 echoverb "Text a llegir: «$text»" 1
 
-if [-z $infile -a -z $outfile ];then
+if [ -z "$infile" -a -z "$outfile" ];then
   ${ECHO} "Especifiqueu un fitxer d'entrada o un nom pel fitxer de sortida"
   ${ECHO} "Usant audio.$oext"
   outfile="audio.$oext"
 fi
 
-if [ -z $outfile ];then # outfile not specified, we create it
+if [ -z "$outfile" ];then # outfile not specified, we create it
    outfile=${infile%.*}.$oext
 elif [ ! "${outfile/*./}" = "$oext" ]; then # outfile specified, we add the right extension if necessary
    outfile=${outfile}.$oext
 fi
 
-if [ -z $title ]; then
+if [ -z "$title" ]; then
    title=$(basename "${infile%.*}")
 fi
 
