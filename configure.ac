@@ -2,12 +2,12 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.67])
-AC_INIT([festcat-utils], [1.3], sergioller@gmail.com)
+AC_INIT([festcat-utils], [1.4], sergioller@gmail.com)
 AC_COPYRIGHT(Copyright 2009-2011 Sergio Oller)
 AC_COPYRIGHT(Copyright 2009-2011 Paco Rivière)
 AC_COPYRIGHT(Copyright 2009-2011 Antonio Bonafonte)
-AM_INIT_AUTOMAKE([festcat-utils], [1.11.3])
 AC_CONFIG_SRCDIR([src/festcat-hts_engine.c])
+AM_INIT_AUTOMAKE
 
 # Checks for programs.
 AC_PROG_CC
@@ -123,7 +123,6 @@ fi
 AC_SUBST(DATE)
 
 # Checks for header files.
-AC_INCLUDES_DEFAULT ()
 AC_CHECK_HEADERS([HTS_engine.h],[],AC_MSG_ERROR(Can't find HTS_engine.h))
 
 # Checks for libraries.
