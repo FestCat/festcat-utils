@@ -2,7 +2,7 @@ Source: festcat-utils
 Section: sound
 Priority: extra
 Maintainer: Sergio Oller <sergioller@gmail.com>
-Build-Depends: debhelper (>= 7.0.50~), autotools-dev, libhtsengine-1.05-dev, xclip, perl, sox, libc-bin,
+Build-Depends: debhelper (>= 7.0.50~), autotools-dev, libhtsengine-dev, xclip, perl, sox, libc-bin,
                file, procps, festival, zenity, id3, vorbis-tools
 Standards-Version: 3.9.2
 Homepage: http://www.talp.cat/festcat/
