@@ -1,4 +1,4 @@
-festcat-utils (1.4-1) precise; urgency=low
+festcat-utils (1.4-1) unstable; urgency=low
 
   * New upstream version.
   * Quotes detection improved
