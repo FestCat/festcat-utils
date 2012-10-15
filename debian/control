@@ -2,22 +2,23 @@ Source: festcat-utils
 Section: sound
 Priority: extra
 Maintainer: Sergio Oller <sergioller@gmail.com>
-Build-Depends: debhelper (>= 7.0.50~), autotools-dev, libhtsengine-dev, xclip, perl, sox, libc-bin,
-               file, procps, festival, zenity, id3, vorbis-tools
-Standards-Version: 3.9.2
-Homepage: http://www.talp.cat/festcat/
+Build-Depends: debhelper (>= 7.0.50~), autotools-dev, libhtsengine-dev, 
+               xclip, perl, sox, file, procps, festival, zenity, id3,
+               vorbis-tools
+Standards-Version: 3.9.3
+Homepage: http://festcat.talp.cat
 
 Package: festcat-utils
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends},  xclip, perl, sox, libc-bin, file, procps, 
-         festival, zenity, id3, vorbis-tools
+Depends: ${shlibs:Depends}, ${misc:Depends},  xclip, perl, sox, file, 
+         procps, festival, zenity, id3, vorbis-tools
 Description: Text to speech utilities (create audiobooks, play clipboard...) 
- festcat-utils provides a graphical interface to Festival, which allows to
- convert text files into audio, read the clipboard, convert and split text books
- into audio files...
+ festcat-utils provides a graphical interface to Festival, which allows one to
+ convert text files into audio, read the clipboard, convert and split text
+ books into audio files...
  .
- festcat-utils takes care of the character encoding conversion and the audio conversion
- to the desired format using tools such as iconv and sox.
+ festcat-utils takes care of the character encoding conversion and 
+ the audio conversion to the desired format using tools such as iconv and sox.
  .
- festcat-utils has been developed with the aim to provide a usable interface to the 
- Festival Catalan voices from the Festcat project.
+ festcat-utils has been developed with the aim to provide a usable interface
+ to the Festival Catalan voices from the Festcat project.
