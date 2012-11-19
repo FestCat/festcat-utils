@@ -114,7 +114,7 @@ done
 while true ;
 do
         opt=$(zenity --list --title "FestCat: Menú Principal" --text 'Trieu una opció' \
-               --radiolist --column "Tria" --column "Opcions disponibles" --column "opt" --hide-column=3 --print-column=3 \
+               --radiolist --height=300 --width=400 --hide-header --column "Tria" --column "Opcions disponibles" --column "opt" --hide-column=3 --print-column=3 \
                TRUE  "Escriure un text i llegir-lo en veu alta" 00 \
                FALSE "Llegir un fitxer en veu alta" 10 \
                FALSE "Convertir text a àudio"   20 \
