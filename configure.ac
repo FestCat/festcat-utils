@@ -125,6 +125,9 @@ AC_SUBST(DATE)
 # Checks for header files.
 AC_CHECK_HEADERS([HTS_engine.h],[],AC_MSG_ERROR(Can't find HTS_engine.h))
 
+# Checks for header files.
+AC_CHECK_HEADERS([stdlib.h string.h])
+
 # Checks for libraries.
 AC_CHECK_LIB([HTSEngine],[HTS_show_copyright],[],AC_MSG_ERROR(Can't find HTSEngine shared library))
 
@@ -134,6 +137,11 @@ AC_TYPE_SIZE_T
 
 # Checks for library functions.
 
-AC_CONFIG_FILES([Makefile doc/Makefile doc/man/Makefile scripts/Makefile share/Makefile src/Makefile etc/Makefile])
-AC_OUTPUT()
-
+AC_CONFIG_FILES([Makefile
+                 doc/Makefile
+                 doc/man/Makefile
+                 etc/Makefile
+                 scripts/Makefile
+                 share/Makefile
+                 src/Makefile])
+AC_OUTPUT
