@@ -1,9 +1,9 @@
 bin_SCRIPTS = audiollibre divcapitols festcat festcat_llegeix \
-              festcat_text2wave readclipboard text2audio 
+              readclipboard text2audio
 
 CLEANFILES = $(bin_SCRIPTS)
 EXTRA_DIST = audiollibre.in divcapitols.in festcat.in festcat_llegeix.in \
-              festcat_text2wave.in readclipboard.in text2audio.in 
+             readclipboard.in text2audio.in
      
 do_subst = sed -e 's|__BINDIR__|$(bindir)|g' \
             -e 's|__SYSCONFDIR__|$(sysconfdir)/@PACKAGE@|g' \
@@ -21,6 +21,7 @@ do_subst = sed -e 's|__BINDIR__|$(bindir)|g' \
             -e 's|__RM__|@RM@|g' \
             -e 's|__KILL__|@KILL@|g' \
             -e 's|__FESTIVAL__|@FESTIVAL@|g' \
+            -e 's|__TEXT2WAVE__|@TEXT2WAVE@|g' \
             -e 's|__ECHO__|@ECHO@|g' \
             -e 's|__ID3__|@ID3@|g' \
             -e 's|__VORBISCOMMENT__|@VORBISCOMMENT@|g' \

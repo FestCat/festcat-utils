@@ -131,8 +131,10 @@ read Opcio
 fi
 
 ${ECHO} "S'està llegint l'arxiu..."
-${FESTCAT_TEXT2WAVE} -eval "(voice_${voice})" -o "$outfile" <<< "${text}"
 
+${TEXT2WAVE} -eval "(voice_${voice})" -o "$outfile.wav" <<< "${text}"
+${SOX} -r 16000 -c 1 -e signed -b 16 "$outfile.wav" "$outfile" || exit 1
+${RM} "${outfile}.wav"
 
 
 if [ "$oext" = "mp3" ]; then
