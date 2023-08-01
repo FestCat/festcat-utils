@@ -1,16 +1,16 @@
 Source: festcat-utils
 Section: sound
-Priority: extra
+Priority: optional
 Maintainer: Sergio Oller <sergioller@gmail.com>
-Build-Depends: debhelper (>= 7.0.50~), autotools-dev,
+Build-Depends: debhelper (>= 12),
                xclip, perl, sox, file, procps, festival, zenity, id3,
                vorbis-tools, wl-clipboard
-Standards-Version: 3.9.3
+Standards-Version: 3.9.5
 Homepage: http://festcat.talp.cat
 
 Package: festcat-utils
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends},  xclip, perl, sox, file, 
+Architecture: all
+Depends: ${misc:Depends},  xclip, perl, sox, file, 
          procps, festival, zenity, id3, vorbis-tools, wl-clipboard
 Recommends: libsox-fmt-mp3, libsox-fmt-base
 Description: Text to speech utilities (create audiobooks, play clipboard...) 
@@ -23,3 +23,4 @@ Description: Text to speech utilities (create audiobooks, play clipboard...)
  .
  festcat-utils has been developed with the aim to provide a usable interface
  to the Festival Catalan voices from the Festcat project.
+

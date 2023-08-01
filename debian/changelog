@@ -1,3 +1,17 @@
+festcat-utils (1.6-1) jammy; urgency=low
+
+  * New upstream version.
+
+ -- Sergio Oller <sergioller@gmail.com>  Tue, 01 Aug 2023 09:41:19 +0200
+
+festcat-utils (1.5-1) precise; urgency=medium
+
+  * New upstream version.
+  * Update standards version 3.9.5 (no change needed)
+  * Change arch from any to all
+
+ -- Sergio Oller <sergioller@gmail.com>  Mon, 05 May 2014 23:52:33 +0200
+
 festcat-utils (1.4-1) unstable; urgency=low
 
   * New upstream version.

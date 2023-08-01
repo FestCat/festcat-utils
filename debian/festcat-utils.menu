@@ -1,4 +1,0 @@
-?package(festcat-utils):needs="X11" section="Applications/Accessibility"\
-  title="FestCat" longtitle="Síntesi de veu en català" \
-  description="Eina per sintetitzar text en àudio." \
-  command="/usr/bin/festcat" icon="/usr/share/pixmaps/festcat-utils.xpm"
