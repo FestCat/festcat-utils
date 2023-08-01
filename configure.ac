@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.67])
-AC_INIT([festcat-utils], [1.6], sergioller@gmail.com)
+AC_INIT([festcat-utils],[1.6],[sergioller@gmail.com])
 AC_COPYRIGHT(Copyright 2009-2023 Sergio Oller)
 AC_COPYRIGHT(Copyright 2009-2011 Paco Rivière)
 AC_COPYRIGHT(Copyright 2009-2011 Antonio Bonafonte)
