@@ -2,16 +2,17 @@ Source: festcat-utils
 Section: sound
 Priority: extra
 Maintainer: Sergio Oller <sergioller@gmail.com>
-Build-Depends: debhelper (>= 7.0.50~), autotools-dev, libhtsengine-dev, 
+Build-Depends: debhelper (>= 7.0.50~), autotools-dev,
                xclip, perl, sox, file, procps, festival, zenity, id3,
-               vorbis-tools
+               vorbis-tools, wl-clipboard
 Standards-Version: 3.9.3
 Homepage: http://festcat.talp.cat
 
 Package: festcat-utils
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends},  xclip, perl, sox, file, 
-         procps, festival, zenity, id3, vorbis-tools
+         procps, festival, zenity, id3, vorbis-tools, wl-clipboard
+Recommends: libsox-fmt-mp3, libsox-fmt-base
 Description: Text to speech utilities (create audiobooks, play clipboard...) 
  festcat-utils provides a graphical interface to Festival, which allows one to
  convert text files into audio, read the clipboard, convert and split text
