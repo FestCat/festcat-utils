@@ -115,13 +115,13 @@ while true ;
 do
         opt=$(zenity --list --title "FestCat: Menú Principal" --text 'Trieu una opció' \
                --radiolist --height=300 --width=400 --hide-header --column "Tria" --column "Opcions disponibles" --column "opt" --hide-column=3 --print-column=3 \
-               TRUE  "Escriure un text i llegir-lo en veu alta" 00 \
-               FALSE "Llegir un fitxer en veu alta" 10 \
-               FALSE "Convertir text a àudio"   20 \
-               FALSE "Crear un audiollibre (Per separar capítols)" 30 \
-               FALSE "Canviar la veu (i idioma)" 40 \
-               FALSE "Ajuda" 50 \
-               FALSE "Sortir" 60 )
+               TRUE  "Llegeix un text en veu alta"                00 \
+               FALSE "Llegeix un fitxer en veu alta"              10 \
+               FALSE "Converteix text a àudio"                    20 \
+               FALSE "Crea un audiollibre (Per separar capítols)" 30 \
+               FALSE "Canvia la veu (i l'idioma)"                 40 \
+               FALSE "Ajuda"                                      50 \
+               FALSE "Surt"                                       60 )
         if [ "$?" != 0 ]; then
             exit 0
         fi
