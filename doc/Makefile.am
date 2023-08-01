@@ -15,5 +15,5 @@ desktopmenu_DATA = festcat-utils.desktop
 CLEANFILES = $(desktopmenu_DATA) *~
 
 festcat-utils.desktop:
-	cp festcat-utils.desktop.in festcat-utils.desktop
+	cp $(srcdir)/festcat-utils.desktop.in festcat-utils.desktop
 	chmod +x festcat-utils.desktop

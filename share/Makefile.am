@@ -1,6 +1,6 @@
-pkgdata_DATA = docfunctions htslabel.scm
+pkgdata_DATA = docfunctions
 CLEANFILES = $(pkgdata_DATA) *~
-EXTRA_DIST = docfunctions.in htslabel.scm.in
+EXTRA_DIST = docfunctions.in
 
   
 do_subst = sed -e 's|__BINDIR__|$(bindir)|g' \
@@ -12,6 +12,7 @@ do_subst = sed -e 's|__BINDIR__|$(bindir)|g' \
             -e 's|__CSPLIT__|@CSPLIT@|g' \
             -e 's|__DATADIR__|$(pkgdatadir)|g' \
             -e 's|__XCLIP__|@XCLIP@|g' \
+            -e 's|__WLPASTE__|@WLPASTE@|g' \
             -e 's|__GREP__|@GREP@|g' \
             -e 's|__CAT__|@CAT@|g' \
             -e 's|__TR__|@TR@|g' \
@@ -19,6 +20,7 @@ do_subst = sed -e 's|__BINDIR__|$(bindir)|g' \
             -e 's|__RM__|@RM@|g' \
             -e 's|__KILL__|@KILL@|g' \
             -e 's|__FESTIVAL__|@FESTIVAL@|g' \
+            -e 's|__TEXT2WAVE__|@TEXT2WAVE@|g' \
             -e 's|__ECHO__|@ECHO@|g' \
             -e 's|__ID3__|@ID3@|g' \
             -e 's|__VORBISCOMMENT__|@VORBISCOMMENT@|g' \

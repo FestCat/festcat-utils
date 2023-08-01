@@ -57,7 +57,7 @@ done
 shift $(($OPTIND - 1)) 
 
 if [ $# = 0 ]; then
-   ${ECHO} "$0: Cal indicar un fitxer de text."
+   ${ECHO} "$0: Indiqueu un fitxer de text."
    $usage
    exit 1
 fi

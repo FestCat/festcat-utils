@@ -74,7 +74,7 @@ voice_exists "$voice" || voice="${DEFAULT_VOICE}"
 valida_audio_ext "$oext"
 
 if [ $# = 0 ]; then
-   ${ECHO} "Cal indicar un fitxer de text."
+   ${ECHO} "Indiqueu un fitxer de text."
    $usage
    exit 1
 fi
@@ -99,7 +99,7 @@ ${DIVCAPITOLS} -o "${outdir}" -f "$divcap_pref" -c "$regex" "${infile}"
 # Passem els capítols a oext
 PISTA=0
 outfile=
-${ECHO} "Passant a $oext..."
+${ECHO} "Sintetitzant in convertint a $oext..."
   for fitxer in "${divcap_pref}"* ;
   do
 	PISTA=$[ $PISTA + 1 ]

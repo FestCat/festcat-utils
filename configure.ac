@@ -2,15 +2,12 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.67])
-AC_INIT([festcat-utils], [1.4], sergioller@gmail.com)
-AC_COPYRIGHT(Copyright 2009-2011 Sergio Oller)
+AC_INIT([festcat-utils],[1.6],[sergioller@gmail.com])
+AC_COPYRIGHT(Copyright 2009-2023 Sergio Oller)
 AC_COPYRIGHT(Copyright 2009-2011 Paco Rivière)
 AC_COPYRIGHT(Copyright 2009-2011 Antonio Bonafonte)
-AC_CONFIG_SRCDIR([src/festcat-hts_engine.c])
+AC_CONFIG_SRCDIR([scripts/audiollibre.in])
 AM_INIT_AUTOMAKE
-
-# Checks for programs.
-AC_PROG_CC
 
 # perl
 AC_PATH_PROG([PERL], [perl], [/usr/bin], [$PATH:/usr/bin])
@@ -43,6 +40,13 @@ if test ! -f "$CSPLIT"; then
 	AC_MSG_ERROR(Can't find CSPLIT)
 fi
 AC_SUBST(CSPLIT)
+
+AC_PATH_PROG([WLPASTE], [wl-paste], [/usr/bin], [$PATH])
+if test ! -f "$WLPASTE"; then
+	AC_MSG_ERROR(Can't find WLPASTE)
+fi
+AC_SUBST(WLPASTE)
+
 
 AC_PATH_PROG([XCLIP], [xclip], [/usr/bin], [$PATH])
 if test ! -f "$XCLIP"; then
@@ -92,6 +96,13 @@ if test ! -f "$FESTIVAL"; then
 fi
 AC_SUBST(FESTIVAL)
 
+AC_PATH_PROG([TEXT2WAVE], [text2wave], [/usr/bin], [$PATH])
+if test ! -f "$TEXT2WAVE"; then
+	AC_MSG_ERROR(Can't find TEXT2WAVE)
+fi
+AC_SUBST(TEXT2WAVE)
+
+
 AC_PATH_PROG([ZENITY], [zenity], [/usr/bin], [$PATH])
 if test ! -f "$ZENITY"; then
 	AC_MSG_ERROR(Can't find ZENITY)
@@ -122,18 +133,12 @@ if test ! -f "$DATE"; then
 fi
 AC_SUBST(DATE)
 
-# Checks for header files.
-AC_CHECK_HEADERS([HTS_engine.h],[],AC_MSG_ERROR(Can't find HTS_engine.h))
-
-# Checks for libraries.
-AC_CHECK_LIB([HTSEngine],[HTS_show_copyright],[],AC_MSG_ERROR(Can't find HTSEngine shared library))
-
-
-# Checks for typedefs, structures, and compiler characteristics.
-AC_TYPE_SIZE_T
-
 # Checks for library functions.
 
-AC_CONFIG_FILES([Makefile doc/Makefile doc/man/Makefile scripts/Makefile share/Makefile src/Makefile etc/Makefile])
-AC_OUTPUT()
-
+AC_CONFIG_FILES([Makefile
+                 doc/Makefile
+                 doc/man/Makefile
+                 etc/Makefile
+                 scripts/Makefile
+                 share/Makefile])
+AC_OUTPUT

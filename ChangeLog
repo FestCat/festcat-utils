@@ -1,3 +1,9 @@
+festcat-utils (1.5) UNRELEASED; urgency=low
+
+  * Remove festcat_text2wave as performance improvements are in festival.
+
+ -- Sergio Oller <sergioller@gmail.com>  Mon, 05 May 2014 21:14:25 +0200
+
 festcat-utils (1.0) UNRELEASED; urgency=low
 
   * Initial release.

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #    Copyright (C) 2009  Antonio Bonafonte, Universitat Politècnica de Catalunya, Barcelona
-#    Copyright (C) 2011  Sergio Oller <sergioller@gmail.com>
+#    Copyright (C) 2011-2023  Sergio Oller <sergioller@gmail.com>
 #
 #    This library is free software; you can redistribute it and/or
 #    modify it under the terms of the GNU Lesser General Public
@@ -49,7 +49,14 @@ if [ "$voice" = "" ]; then
    voice="${DEFAULT_VOICE}"
 fi
 
-text=$(${XCLIP} -o | ${PERL} -pe 'tr/"//d')
+if [ "${XDG_SESSION_TYPE}" = "wayland" ]; then
+   text=$(${WLPASTE})
+else
+   text=$(${XCLIP} -o)
+fi
+
+text=$(echo ${text} | ${PERL} -pe 'tr/"//d')
+
 text=$(clean_string "${text}")
 
 #${FESTIVAL} -b "(voice_$voice)" -b "(SayText \"${text}\")" &
