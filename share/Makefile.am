@@ -12,6 +12,7 @@ do_subst = sed -e 's|__BINDIR__|$(bindir)|g' \
             -e 's|__CSPLIT__|@CSPLIT@|g' \
             -e 's|__DATADIR__|$(pkgdatadir)|g' \
             -e 's|__XCLIP__|@XCLIP@|g' \
+            -e 's|__WLPASTE__|@WLPASTE@|g' \
             -e 's|__GREP__|@GREP@|g' \
             -e 's|__CAT__|@CAT@|g' \
             -e 's|__TR__|@TR@|g' \

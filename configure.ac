@@ -41,6 +41,13 @@ if test ! -f "$CSPLIT"; then
 fi
 AC_SUBST(CSPLIT)
 
+AC_PATH_PROG([WLPASTE], [wl-paste], [/usr/bin], [$PATH])
+if test ! -f "$WLPASTE"; then
+	AC_MSG_ERROR(Can't find WLPASTE)
+fi
+AC_SUBST(WLPASTE)
+
+
 AC_PATH_PROG([XCLIP], [xclip], [/usr/bin], [$PATH])
 if test ! -f "$XCLIP"; then
 	AC_MSG_ERROR(Can't find XCLIP)
