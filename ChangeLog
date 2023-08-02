@@ -1,3 +1,10 @@
+festcat-utils (1.6) UNRELEASED; urgency=low
+
+  * Fix menu wording
+  * Add readclipboard support for wayland
+
+ -- Sergio Oller <sergioller@gmail.com>  Wed, 02 Aug 2023 06:02:49 +0200
+
 festcat-utils (1.5) UNRELEASED; urgency=low
 
   * Remove festcat_text2wave as performance improvements are in festival.
